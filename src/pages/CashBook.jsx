@@ -29,13 +29,6 @@ function CashBook() {
       <br />
       <br />
 
-      <Link to="/ledger">
-        <button>Ledger</button>
-      </Link>
-
-      <br />
-      <br />
-
       <Link to="/">
         <button>← Dashboard</button>
       </Link>

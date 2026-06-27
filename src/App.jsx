@@ -18,7 +18,7 @@ import ViewCuttingVouchers from "./pages/ViewCuttingVouchers";
 import CashBook from "./pages/CashBook";
 import AddCashEntry from "./pages/AddCashEntry";
 import ViewCashEntries from "./pages/ViewCashEntries";
-import Ledger from "./pages/Ledger";
+
 import BankWithdrawal from "./pages/BankWithdrawal";
 
 import WeeklyReport from "./pages/WeeklyReport";
@@ -67,7 +67,7 @@ function App() {
             path="/view-cash-entries"
             element={<ViewCashEntries />}
           />
-          <Route path="/ledger" element={<Ledger />} />
+        
           <Route path="/bank-withdrawal" element={<BankWithdrawal />} />
 
           {/* Reports */}
