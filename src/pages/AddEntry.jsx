@@ -123,6 +123,33 @@ const handleChange = (e) => {
     [name]: value,
   }));
 };
+const addWorker = async () => {
+  const name = newWorker.trim();
+
+  if (!name) {
+    return alert("Enter worker name");
+  }
+
+  if (
+    workers.some(
+      (w) => w.name.toLowerCase() === name.toLowerCase()
+    )
+  ) {
+    return alert("Worker already exists");
+  }
+
+  await db.workers.add({ name });
+
+  setWorkers(await db.workers.toArray());
+
+  setFormData((prev) => ({
+    ...prev,
+    workerName: name,
+  }));
+
+  setNewWorker("");
+  setShowWorkerInput(false);
+};
   const addJob = async () => {
     const name = newJob.trim();
 
