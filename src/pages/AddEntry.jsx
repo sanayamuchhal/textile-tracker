@@ -3,7 +3,7 @@ import { db } from "../data/db";
 import { seedWorkers } from "../data/seedWorkers";
 import { seedJobs } from "../data/seedJobs";
 import { getMonth, getWeek } from "../utils/dateHelpers";
-import { Link } from "react-router-dom";
+import "./entryForms.css";
 const today = new Date().toISOString().split("T")[0];
 
 function AddEntry() {
@@ -210,224 +210,134 @@ const addWorker = async () => {
 };
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h1 className="entry-title">Textile Production Tracker</h1>
 
-    <Link to="/">
-      <button>← Dashboard</button>
-    </Link>
+        <div className="entry-field">
+          <label className="entry-label">Date</label>
+          <input className="entry-input" type="date" name="date" value={formData.date} onChange={handleChange} />
+        </div>
 
-    <br />
-    <br />
-      
+        <div className="entry-field">
+          <label className="entry-label">Challan No</label>
+          <input className="entry-input" type="text" value={formData.challanNo} readOnly placeholder="Challan No" />
+        </div>
 
-      <h1>Textile Production Tracker</h1>
+        <div className="entry-field">
+          <label className="entry-label">Worker</label>
+          <select className="entry-select" name="workerName" value={formData.workerName} onChange={handleChange}>
+            <option value="">Select Worker</option>
+            {workers.map((w) => (
+              <option key={w.id} value={w.name}>
+                {w.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <br />
+        <div className="entry-field">
+          <button className="entry-button" onClick={() => setShowWorkerInput(!showWorkerInput)}>
+            + Add Worker
+          </button>
+        </div>
 
-      <input
-        type="date"
-        name="date"
-        value={formData.date}
-        onChange={handleChange}
-      />
+        {showWorkerInput && (
+          <>
+            <div className="entry-field">
+              <input className="entry-input" value={newWorker} onChange={(e) => setNewWorker(e.target.value)} placeholder="Worker Name" />
+            </div>
+            <div className="entry-field">
+              <button className="entry-button" onClick={addWorker}>Save Worker</button>
+            </div>
+          </>
+        )}
 
-      <br />
-      <br />
+        <div className="entry-field">
+          <label className="entry-label">Payment Mode</label>
+          <select className="entry-select" name="paymentMode" value={formData.paymentMode} onChange={handleChange}>
+            <option value="Cash">Cash</option>
+            <option value="Bank">Bank</option>
+          </select>
+        </div>
 
-      <input
-        type="text"
-        value={formData.challanNo}
-        readOnly
-        placeholder="Challan No"
-      />
+        <div className="entry-field">
+          <label className="entry-label">Sheet Number</label>
+          <input className="entry-input" name="sheetNo" value={formData.sheetNo} onChange={handleChange} placeholder="Sheet Number" />
+        </div>
 
-      <br />
-      <br />
+        <div className="entry-field">
+          <label className="entry-label">Roll Number</label>
+          <select className="entry-select" name="rollNo" value={formData.rollNo} onChange={handleChange}>
+            <option value="">Select Roll</option>
+            {uniqueRolls.map((roll) => (
+              <option key={roll} value={roll}>
+                {roll}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <select
-        name="workerName"
-        value={formData.workerName}
-        onChange={handleChange}
-      >
-        <option value="">Select Worker</option>
+        <div className="entry-field">
+          <label className="entry-label">Article Number</label>
+          <select className="entry-select" name="articleNo" value={formData.articleNo} onChange={handleChange}>
+            <option value="">Select Article</option>
+            {availableArticles.map((article) => (
+              <option key={`${article.rollNo}-${article.articleNo}`} value={article.articleNo}>
+                {article.articleNo}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {workers.map((w) => (
-          <option key={w.id} value={w.name}>
-            {w.name}
-          </option>
-        ))}
-      </select>
+        <div className="entry-field">
+          <label className="entry-label">Pattern</label>
+          <input className="entry-input" value={formData.pattern} readOnly />
+        </div>
 
-      <button onClick={() => setShowWorkerInput(!showWorkerInput)}>
-        + Add Worker
-      </button>
+        <div className="entry-field">
+          <label className="entry-label">Job Type</label>
+          <select className="entry-select" name="jobType" value={formData.jobType} onChange={handleChange}>
+            <option value="">Select Job</option>
+            {jobs.map((j) => (
+              <option key={j.id} value={j.name}>
+                {j.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {showWorkerInput && (
-        <>
-          <br />
-          <br />
+        <div className="entry-field">
+          <button className="entry-button" onClick={() => setShowJobInput(!showJobInput)}>
+            + Add Job
+          </button>
+        </div>
 
-          <input
-            value={newWorker}
-            onChange={(e) => setNewWorker(e.target.value)}
-            placeholder="Worker Name"
-          />
+        {showJobInput && (
+          <>
+            <div className="entry-field">
+              <input className="entry-input" value={newJob} onChange={(e) => setNewJob(e.target.value)} placeholder="Job Name" />
+            </div>
+            <div className="entry-field">
+              <button className="entry-button" onClick={addJob}>Save Job</button>
+            </div>
+          </>
+        )}
 
-          <button onClick={addWorker}>Save Worker</button>
-        </>
-      )}
+        <div className="entry-field">
+          <label className="entry-label">PCS</label>
+          <input className="entry-input" type="text" inputMode="numeric" name="pcs" value={formData.pcs} onChange={handleChange} placeholder="PCS" />
+        </div>
 
-      <br />
-      <br />
+        <div className="entry-field">
+          <label className="entry-label">Rate</label>
+          <input className="entry-input" type="text" inputMode="numeric" name="rate" value={formData.rate} onChange={handleChange} placeholder="Rate" />
+        </div>
 
-      <label>Payment Mode</label>
+        <p className="entry-summary">Amount: ₹{amount}</p>
 
-      <br />
-
-      <select
-        name="paymentMode"
-        value={formData.paymentMode}
-        onChange={handleChange}
-      >
-        <option value="Cash">Cash</option>
-        <option value="Bank">Bank</option>
-      </select>
-
-      <br />
-      <br />
-<label>Sheet Number</label>
-
-<br />
-
-<input
-  name="sheetNo"
-  value={formData.sheetNo}
-  onChange={handleChange}
-  placeholder="Sheet Number"
-/>
-
-<br />
-<br />
-      <label>Roll Number</label>
-
-<br />
-
-<select
-  name="rollNo"
-  value={formData.rollNo}
-  onChange={handleChange}
->
-  <option value="">Select Roll</option>
-
-  {uniqueRolls.map((roll) => (
-    <option key={roll} value={roll}>
-      {roll}
-    </option>
-  ))}
-</select>
-
-<br />
-<br />
-<label>Article Number</label>
-
-<br />
-
-<select
-  name="articleNo"
-  value={formData.articleNo}
-  onChange={handleChange}
->
-  <option value="">Select Article</option>
-
-  {availableArticles.map((article) => (
-    <option
-      key={`${article.rollNo}-${article.articleNo}`}
-      value={article.articleNo}
-    >
-      {article.articleNo}
-    </option>
-  ))}
-</select>
-
-<br />
-<br />
-<label>Pattern</label>
-
-<br />
-
-<input
-  value={formData.pattern}
-  readOnly
-/>
-
-<br />
-<br />
-
-      <select
-        name="jobType"
-        value={formData.jobType}
-        onChange={handleChange}
-      >
-        <option value="">Select Job</option>
-
-        {jobs.map((j) => (
-          <option key={j.id} value={j.name}>
-            {j.name}
-          </option>
-        ))}
-      </select>
-
-      <button onClick={() => setShowJobInput(!showJobInput)}>
-        + Add Job
-      </button>
-
-      {showJobInput && (
-        <>
-          <br />
-          <br />
-
-          <input
-            value={newJob}
-            onChange={(e) => setNewJob(e.target.value)}
-            placeholder="Job Name"
-          />
-
-          <button onClick={addJob}>Save Job</button>
-        </>
-      )}
-
-      <br />
-      <br />
-
-      <input
-        type="text"
-        inputMode="numeric"
-        name="pcs"
-        value={formData.pcs}
-        onChange={handleChange}
-        placeholder="PCS"
-      />
-
-      <br />
-      <br />
-
-      <input
-        type="text"
-        inputMode="numeric"
-        name="rate"
-        value={formData.rate}
-        onChange={handleChange}
-        placeholder="Rate"
-      />
-
-      <br />
-      <br />
-
-      <h3>Amount: ₹{amount}</h3>
-
-      <br />
-
-      <button onClick={saveEntry}>Save Entry</button>
+        <button className="entry-button" onClick={saveEntry}>Save Entry</button>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { db } from "../data/db";
 import { exportRollProgressReport } from "../utils/exportRollProgressReport";
 import { exportCashBook } from "../utils/exportCashBook";
@@ -71,13 +70,6 @@ function Export() {
       <button onClick={handleExportCash}>
         💰 Export Cash Book
       </button>
-
-      <br />
-      <br />
-
-      <Link to="/">
-        <button>← Dashboard</button>
-      </Link>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { db } from "../data/db";
 import { getMonth } from "../utils/dateHelpers";
+import "./entryForms.css";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -122,52 +122,68 @@ function FabricReturnInput() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <Link to="/fab">
-        <button>Back to FAB GRIN</button>
-      </Link>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h1 className="entry-title">Fabric Return Input</h1>
 
-      <h1>Fabric Return Input</h1>
+        <div className="entry-field">
+          <label className="entry-label">Voucher Number</label>
+          <input className="entry-input" name="voucherNo" value={form.voucherNo} readOnly />
+        </div>
 
-      <div style={{ maxWidth: 520 }}>
-        <label>Voucher Number</label>
-        <input name="voucherNo" value={form.voucherNo} readOnly style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Date</label>
+          <input className="entry-input" type="date" name="date" value={form.date} onChange={handleChange} />
+        </div>
 
-        <label>Date</label>
-        <input type="date" name="date" value={form.date} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Roll Number</label>
+          <input className="entry-input" list="returnRolls" name="rollNo" value={form.rollNo} onChange={handleChange} placeholder="Select roll if return belongs to stock" />
+          <datalist id="returnRolls">
+            {rolls.map((roll) => (
+              <option key={roll.id} value={roll.rollNo} />
+            ))}
+          </datalist>
+        </div>
 
-        <label>Roll Number</label>
-        <input list="returnRolls" name="rollNo" value={form.rollNo} onChange={handleChange} placeholder="Select roll if return belongs to stock" style={{ width: "100%", marginBottom: 10 }} />
-        <datalist id="returnRolls">
-          {rolls.map((roll) => (
-            <option key={roll.id} value={roll.rollNo} />
-          ))}
-        </datalist>
+        <div className="entry-field">
+          <label className="entry-label">Party</label>
+          <input className="entry-input" name="party" value={form.party} onChange={handleChange} />
+        </div>
 
-        <label>Party</label>
-        <input name="party" value={form.party} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Vendor Bill Detail</label>
+          <input className="entry-input" name="vendorBillDetail" value={form.vendorBillDetail} onChange={handleChange} />
+        </div>
 
-        <label>Vendor Bill Detail</label>
-        <input name="vendorBillDetail" value={form.vendorBillDetail} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Category</label>
+          <input className="entry-input" name="category" value={form.category} onChange={handleChange} />
+        </div>
 
-        <label>Category</label>
-        <input name="category" value={form.category} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Quality</label>
+          <input className="entry-input" name="quality" value={form.quality} onChange={handleChange} />
+        </div>
 
-        <label>Quality</label>
-        <input name="quality" value={form.quality} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Meter</label>
+          <input className="entry-input" type="number" name="meter" value={form.meter} onChange={handleChange} />
+        </div>
 
-        <label>Meter</label>
-        <input type="number" name="meter" value={form.meter} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Rate</label>
+          <input className="entry-input" type="number" name="rate" value={form.rate} onChange={handleChange} />
+        </div>
 
-        <label>Rate</label>
-        <input type="number" name="rate" value={form.rate} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Debit Number</label>
+          <input className="entry-input" name="debitNo" value={form.debitNo} onChange={handleChange} />
+        </div>
 
-        <label>Debit Number</label>
-        <input name="debitNo" value={form.debitNo} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <h3 className="entry-summary">Amount: {amount}</h3>
 
-        <h3>Amount: {amount}</h3>
-
-        <button onClick={saveReturn}>Save Fabric Return</button>
+        <button className="entry-button" onClick={saveReturn}>Save Fabric Return</button>
       </div>
     </div>
   );

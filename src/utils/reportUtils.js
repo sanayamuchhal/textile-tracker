@@ -158,18 +158,38 @@ export function buildWagesRows(entries, cashEntries) {
       month: entry.month,
       week: entry.week,
     });
-    const detail =
-  entry.paymentMode === "Bank"
-    ? entry.chequeNo || entry.narration || ""
-    : "";
+    const amount = cashPaymentAmount(entry);
 
-    row.amountPaid += cashPaymentAmount(entry);
-   if (entry.paymentMode) {
+row.amountPaid += amount;
+
+if (entry.paymentMode) {
   row.paymentModes.add(entry.paymentMode);
 }
 
-if (entry.paymentMode === "Bank" && detail) {
-  row.paymentDetails.push(String(detail));
+if (entry.paymentMode === "Bank") {
+  const detail = [
+    entry.voucherNo && `Voucher: ${entry.voucherNo}`,
+    entry.chequeNo && `Cheque: ${entry.chequeNo}`,
+    entry.narration,
+  ]
+    .filter(Boolean)
+    .join(" | ");
+
+  if (detail) {
+    row.paymentDetails.push(detail);
+  }
+}
+
+if (entry.paymentMode === "Cash") {
+  const detail = [
+    entry.voucherNo && `Voucher: ${entry.voucherNo}`,
+  ]
+    .filter(Boolean)
+    .join(" | ");
+
+  if (detail) {
+    row.paymentDetails.push(detail);
+  }
 }
   });
 

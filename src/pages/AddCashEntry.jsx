@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { db } from "../data/db";
-import { Link } from "react-router-dom";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import "./entryForms.css";
 
 function AddCashEntry() {
   const [categories, setCategories] = useState([]);
@@ -113,106 +113,66 @@ function AddCashEntry() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Link to="/">⬅ Back</Link>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h2 className="entry-title">Add Expense Entry</h2>
 
-      <h2>Add Expense Entry</h2>
+        <div className="entry-field">
+          <label className="entry-label">Voucher No.</label>
+          <input className="entry-input" type="text" value={voucherNo} disabled />
+        </div>
 
-      <div style={{ maxWidth: "450px" }}>
-                <label>Voucher No.</label>
-        <input
-          type="text"
-          value={voucherNo}
-          disabled
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Date</label>
+          <input className="entry-input" type="date" name="date" value={form.date} onChange={handleChange} />
+        </div>
 
-        <label>Date</label>
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Month</label>
+          <input className="entry-input" type="text" value={form.month} disabled />
+        </div>
 
-        <label>Month</label>
-        <input
-          type="text"
-          value={form.month}
-          disabled
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Week</label>
+          <input className="entry-input" type="text" value={form.week} disabled />
+        </div>
 
-        <label>Week</label>
-        <input
-          type="text"
-          value={form.week}
-          disabled
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Category</label>
+          <input className="entry-input" list="cashCategories" name="category" value={form.category} onChange={handleChange} placeholder="Enter or Select Category" />
+          <datalist id="cashCategories">
+            {categories.map((category) => (
+              <option key={category.id} value={category.name} />
+            ))}
+          </datalist>
+        </div>
 
-        <label>Category</label>
-        <input
-          list="cashCategories"
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          placeholder="Enter or Select Category"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Name</label>
+          <input className="entry-input" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Enter Name" />
+        </div>
 
-        <datalist id="cashCategories">
-          {categories.map((category) => (
-            <option key={category.id} value={category.name} />
-          ))}
-        </datalist>
+        <div className="entry-field">
+          <label className="entry-label">Payment Mode</label>
+          <select className="entry-select" name="paymentMode" value={form.paymentMode} onChange={handleChange}>
+            <option value="">Select Payment Mode</option>
+            <option value="Cash">Cash</option>
+            <option value="Bank">Bank</option>
+          </select>
+        </div>
 
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          placeholder="Enter Name"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-        <label>Payment Mode</label>
-<select
-  name="paymentMode"
-  value={form.paymentMode}
-  onChange={handleChange}
-  style={{ width: "100%", marginBottom: "10px" }}
->
-  <option value="">Select Payment Mode</option>
-  <option value="Cash">Cash</option>
-  <option value="Bank">Bank</option>
-</select>
+        <div className="entry-field">
+          <label className="entry-label">Amount</label>
+          <input className="entry-input" type="number" name="amount" value={form.amount} onChange={handleChange} placeholder="Enter Amount" />
+        </div>
 
-        <label>Amount</label>
-        <input
-          type="number"
-          name="amount"
-          value={form.amount}
-          onChange={handleChange}
-          placeholder="Enter Amount"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Narration</label>
+          <textarea className="entry-textarea" name="narration" value={form.narration} onChange={handleChange} rows="3" placeholder="Enter Narration" />
+        </div>
 
-        <label>Narration</label>
-        <textarea
-          name="narration"
-          value={form.narration}
-          onChange={handleChange}
-          rows="3"
-          placeholder="Enter Narration"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-
-        <button onClick={handleSave}>
-          Save Expense
-        </button>
-              </div>
+        <button className="entry-button" onClick={handleSave}>Save Expense</button>
+      </div>
     </div>
   );
 }

@@ -45,31 +45,31 @@ const [rollNumber, setRollNumber] = useState("");
       title="VAR Cost Detail"
       rows={detail.rows}
       onExport={() => exportRows(exportData, "VAR_Cost_Detail")}
-     filters={
-  <>
-    <SelectFilter
-      label="Roll Number"
-      value={rollNumber}
-      options={unique(cuttingVouchers.map((entry) => entry.rollNo))}
-      onChange={(value) => {
-        setRollNumber(value);
-        setArticleNo("");
-      }}
-    />
+      filters={
+        <>
+          <SelectFilter
+            label="Roll Number"
+            value={rollNumber}
+            options={unique(cuttingVouchers.map((entry) => entry.rollNo))}
+            onChange={(value) => {
+              setRollNumber(value);
+              setArticleNo("");
+            }}
+          />
 
-    <SelectFilter
-      label="Article No"
-      value={articleNo}
-      options={articleOptions}
-      onChange={setArticleNo}
-    />
-  </>
-}
+          <SelectFilter
+            label="Article No"
+            value={articleNo}
+            options={articleOptions}
+            onChange={setArticleNo}
+          />
+        </>
+      }
     >
       {detail.detail && (
-        <div style={{ marginBottom: 16 }}>
+        <div className="report-section">
           <ReportTable rows={[detail.detail]} />
-          <p>
+          <p style={{ marginTop: 12 }}>
             <strong>Total Amount:</strong> {detail.totalAmount}
           </p>
           <p>

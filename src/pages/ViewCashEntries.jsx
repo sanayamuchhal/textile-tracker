@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../data/db";
-import { Link } from "react-router-dom";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import "./Reports.css";
 
 function ViewCashEntries() {
   const [entries, setEntries] = useState([]);
@@ -109,51 +109,46 @@ function ViewCashEntries() {
   });
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Link to="/">⬅ Back</Link>
+    <div className="data-page">
+      <div className="data-page-header">
+        <div>
+          <p className="report-kicker">Records</p>
+          <h2 className="data-page-title">Cash Register</h2>
+        </div>
+      </div>
 
-      <h2>Cash Register</h2>
+      <div className="data-toolbar">
+        <input
+          className="data-search"
+          type="text"
+          placeholder="Search Voucher, Category, Bank, Name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Search Voucher, Category, Bank, Name..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: "350px",
-          padding: "8px",
-          marginBottom: "20px",
-        }}
-      />
+      <div className="data-table-shell">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Week</th>
+              <th>Month</th>
+              <th>Category</th>
+              <th>Name</th>
+              <th>DBT</th>
+              <th>CRT</th>
+              <th>Narration</th>
+              <th>Balance</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
 
-      <table
-        border="1"
-        cellPadding="8"
-        style={{
-          borderCollapse: "collapse",
-          width: "100%",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Week</th>
-            <th>Month</th>
-            <th>Category</th>
-            <th>Name</th>
-            <th>DBT</th>
-            <th>CRT</th>
-            <th>Narration</th>
-            <th>Balance</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-
-        <tbody>
-                  {filteredEntries.map((entry) => (
-            <>
-              <tr key={entry.id}>
+          <tbody>
+            {filteredEntries.map((entry) => (
+              <>
+                <tr key={entry.id}>
                 <td>
                   {editingId === entry.id ? (
                     <input
@@ -277,11 +272,12 @@ function ViewCashEntries() {
 
                 <td>
                   {editingId === entry.id ? (
-                    <button onClick={() => handleSave(entry)}>
+                    <button className="action-button primary" onClick={() => handleSave(entry)}>
                       Save
                     </button>
                   ) : (
                     <button
+                      className="action-button secondary"
                       onClick={() => {
                         setPasswordRow(entry.id);
                         setPassword("");
@@ -292,17 +288,18 @@ function ViewCashEntries() {
                   )}
                 </td>
                 <td>
-  <button
-    onClick={async () => {
-      if (window.confirm("Are you sure you want to delete this entry?")) {
-        await db.cashEntries.delete(entry.id);
-        loadEntries();
-      }
-    }}
-  >
-    Delete
-  </button>
-</td>
+                  <button
+                    className="action-button danger"
+                    onClick={async () => {
+                      if (window.confirm("Are you sure you want to delete this entry?")) {
+                        await db.cashEntries.delete(entry.id);
+                        loadEntries();
+                      }
+                    }}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
 
               {passwordRow === entry.id && (
@@ -316,6 +313,7 @@ function ViewCashEntries() {
                     />
 
                     <button
+                      className="action-button primary"
                       onClick={() => {
                         if (password === EDIT_PASSWORD) {
                           setEditingId(entry.id);
@@ -330,6 +328,7 @@ function ViewCashEntries() {
                     </button>
 
                     <button
+                      className="action-button secondary"
                       onClick={() => {
                         setPasswordRow(null);
                         setPassword("");
@@ -342,15 +341,16 @@ function ViewCashEntries() {
               )}
             </>
           ))}
-                    {filteredEntries.length === 0 && (
+          {filteredEntries.length === 0 && (
             <tr>
-              <td colSpan="11" style={{ textAlign: "center" }}>
+              <td colSpan="11" className="report-empty">
                 No Cash Entries Found
               </td>
             </tr>
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

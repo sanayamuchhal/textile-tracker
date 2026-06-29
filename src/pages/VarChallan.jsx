@@ -1,29 +1,12 @@
-import { Link } from "react-router-dom";
+import "./entryForms.css";
 
 function VarChallan() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>VAR Challan</h1>
-
-      <br />
-
-      <Link to="/add">
-        <button>Add Entry</button>
-      </Link>
-
-      <br />
-      <br />
-
-      <Link to="/view">
-        <button>View Entries</button>
-      </Link>
-
-      <br />
-      <br />
-
-      <Link to="/">
-        <button>← Dashboard</button>
-      </Link>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h1 className="entry-title">VAR Challan</h1>
+        <p className="entry-helper">Manage VAR challan records through the sidebar actions for adding or reviewing entries.</p>
+      </div>
     </div>
   );
 }

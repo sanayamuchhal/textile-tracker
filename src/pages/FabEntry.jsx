@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { db } from "../data/db";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import "./entryForms.css";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -137,158 +137,86 @@ const finishGrin = async () => {
 };
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h1 className="entry-title">FAB Entry</h1>
 
-      <Link to="/fab">
-        <button>← FAB GRIN</button>
-      </Link>
+        <h3 className="entry-label">GRIN Details</h3>
 
-      <h1>FAB Entry</h1>
-
-      <hr />
-
-      <h3>GRIN Details</h3>
-
-      <input
-        type="date"
-        name="date"
-        value={grinDetails.date}
-        onChange={handleGrinChange}
-      />
-
-      <br /><br />
-
-      <input
-  name="grinNo"
-  value={grinDetails.grinNo}
-  readOnly
-/>
-      <br /><br />
-
-      <input
-        name="party"
-        placeholder="Party"
-        value={grinDetails.party}
-        onChange={handleGrinChange}
-      />
-
-      <br /><br />
-
-      <input
-        name="invoice"
-        placeholder="Invoice"
-        value={grinDetails.invoice}
-        onChange={handleGrinChange}
-      />
-
-      <br /><br />
-      <input
-  name="sheetNo"
-  placeholder="Sheet Number"
-  value={grinDetails.sheetNo}
-  onChange={handleGrinChange}
-/>
-
-<br /><br />
-
-      <input
-        name="category"
-        placeholder="Category"
-        value={grinDetails.category}
-        onChange={handleGrinChange}
-      />
-
-      <hr />
-
-      <h3>Current Roll</h3>
-
-      <input
-  name="rollNo"
-  value={roll.rollNo}
-  readOnly
-/>
-
-      <br /><br />
-
-      <input
-        name="quality"
-        placeholder="Quality"
-        value={roll.quality}
-        onChange={handleRollChange}
-      />
-
-      <br /><br />
-
-      <input
-        name="meter"
-        placeholder="Meter"
-        value={roll.meter}
-        onChange={handleRollChange}
-      />
-
-      <br /><br />
-
-      <input
-        name="rate"
-        placeholder="Rate"
-        value={roll.rate}
-        onChange={handleRollChange}
-      />
-
-      <br /><br />
-
-      
-
-      <h3>Value : ₹ {value}</h3>
-
-    
-
-      <button onClick={saveRoll}>
-        Save Roll
-      </button>
-      <br /><br />
-
-<button onClick={finishGrin}>
-  Finish GRIN
-</button>
-
-      <hr />
-
-      <h2>Added Rolls</h2>
-
-      {savedRolls.length === 0 && (
-        <p>No rolls added.</p>
-      )}
-
-      {savedRolls.map((item, index) => (
-        <div
-          key={index}
-          style={{
-            border: "1px solid gray",
-            padding: 10,
-            marginBottom: 10,
-          }}
-        >
-          <strong>Roll :</strong> {item.rollNo}
-
-          <br />
-
-          <strong>Quality :</strong> {item.quality}
-
-          <br />
-
-          <strong>Meter :</strong> {item.meter}
-
-          <br />
-
-          <strong>Rate :</strong> {item.rate}
-
-          <br />
-
-          <strong>Value :</strong> ₹ {item.value}
+        <div className="entry-field">
+          <label className="entry-label">Date</label>
+          <input className="entry-input" type="date" name="date" value={grinDetails.date} onChange={handleGrinChange} />
         </div>
-      ))}
 
+        <div className="entry-field">
+          <label className="entry-label">GRIN No</label>
+          <input className="entry-input" name="grinNo" value={grinDetails.grinNo} readOnly />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Party</label>
+          <input className="entry-input" name="party" placeholder="Party" value={grinDetails.party} onChange={handleGrinChange} />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Invoice</label>
+          <input className="entry-input" name="invoice" placeholder="Invoice" value={grinDetails.invoice} onChange={handleGrinChange} />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Sheet Number</label>
+          <input className="entry-input" name="sheetNo" placeholder="Sheet Number" value={grinDetails.sheetNo} onChange={handleGrinChange} />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Category</label>
+          <input className="entry-input" name="category" placeholder="Category" value={grinDetails.category} onChange={handleGrinChange} />
+        </div>
+
+        <h3 className="entry-label">Current Roll</h3>
+
+        <div className="entry-field">
+          <label className="entry-label">Roll No</label>
+          <input className="entry-input" name="rollNo" value={roll.rollNo} readOnly />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Quality</label>
+          <input className="entry-input" name="quality" placeholder="Quality" value={roll.quality} onChange={handleRollChange} />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Meter</label>
+          <input className="entry-input" name="meter" placeholder="Meter" value={roll.meter} onChange={handleRollChange} />
+        </div>
+
+        <div className="entry-field">
+          <label className="entry-label">Rate</label>
+          <input className="entry-input" name="rate" placeholder="Rate" value={roll.rate} onChange={handleRollChange} />
+        </div>
+
+        <p className="entry-summary">Value : ₹ {value}</p>
+
+        <button className="entry-button" onClick={saveRoll}>Save Roll</button>
+        <div className="entry-field" />
+        <button className="entry-button" onClick={finishGrin}>Finish GRIN</button>
+
+        <div className="entry-field" />
+
+        <h2 className="entry-title">Added Rolls</h2>
+
+        {savedRolls.length === 0 && <p className="entry-helper">No rolls added.</p>}
+
+        {savedRolls.map((item, index) => (
+          <div key={index} style={{ border: "1px solid #cbd5e1", borderRadius: 4, padding: 10, marginBottom: 8, background: "#ffffff" }}>
+            <p className="entry-helper"><strong>Roll No:</strong> {item.rollNo}</p>
+            <p className="entry-helper"><strong>Quality:</strong> {item.quality}</p>
+            <p className="entry-helper"><strong>Meter:</strong> {item.meter}</p>
+            <p className="entry-helper"><strong>Rate:</strong> {item.rate}</p>
+            <p className="entry-helper"><strong>Value:</strong> ₹{item.value}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

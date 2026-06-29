@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { db } from "../data/db";
-import { Link } from "react-router-dom";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import "./entryForms.css";
 
 function BankWithdrawal() {
   const [banks, setBanks] = useState([]);
@@ -107,84 +107,51 @@ function BankWithdrawal() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Link to="/">⬅ Back</Link>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h2 className="entry-title">Bank Withdrawal (CRT)</h2>
 
-      <h2>Bank Withdrawal (CRT)</h2>
+        <div className="entry-field">
+          <label className="entry-label">Voucher No.</label>
+          <input className="entry-input" type="text" value={voucherNo} disabled />
+        </div>
 
-      <div style={{ maxWidth: "450px" }}>
-        <label>Voucher No.</label>
-        <input
-          type="text"
-          value={voucherNo}
-          disabled
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Date</label>
+          <input className="entry-input" type="date" name="date" value={form.date} onChange={handleChange} />
+        </div>
 
-        <label>Date</label>
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Month</label>
+          <input className="entry-input" type="text" value={form.month} disabled />
+        </div>
 
-        <label>Month</label>
-        <input
-          type="text"
-          value={form.month}
-          disabled
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Week</label>
+          <input className="entry-input" type="text" value={form.week} disabled />
+        </div>
 
-        <label>Week</label>
-        <input
-          type="text"
-          value={form.week}
-          disabled
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Bank Name</label>
+          <input className="entry-input" list="cashBanks" name="bankName" value={form.bankName} onChange={handleChange} placeholder="Enter or Select Bank" />
+          <datalist id="cashBanks">
+            {banks.map((bank) => (
+              <option key={bank.id} value={bank.name} />
+            ))}
+          </datalist>
+        </div>
 
-        <label>Bank Name</label>
-        <input
-          list="cashBanks"
-          name="bankName"
-          value={form.bankName}
-          onChange={handleChange}
-          placeholder="Enter or Select Bank"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
+        <div className="entry-field">
+          <label className="entry-label">Amount</label>
+          <input className="entry-input" type="number" name="amount" value={form.amount} onChange={handleChange} placeholder="Enter Amount" />
+        </div>
 
-        <datalist id="cashBanks">
-          {banks.map((bank) => (
-            <option key={bank.id} value={bank.name} />
-          ))}
-        </datalist>
+        <div className="entry-field">
+          <label className="entry-label">Cheque No.</label>
+          <input className="entry-input" type="text" name="chequeNo" value={form.chequeNo} onChange={handleChange} placeholder="Enter Cheque Number" />
+        </div>
 
-        <label>Amount</label>
-        <input
-          type="number"
-          name="amount"
-          value={form.amount}
-          onChange={handleChange}
-          placeholder="Enter Amount"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-
-        <label>Cheque No.</label>
-        <input
-          type="text"
-          name="chequeNo"
-          value={form.chequeNo}
-          onChange={handleChange}
-          placeholder="Enter Cheque Number"
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-
-        <button onClick={handleSave}>
-          Save Bank Withdrawal
-        </button>
+        <button className="entry-button" onClick={handleSave}>Save Bank Withdrawal</button>
       </div>
     </div>
   );

@@ -1,0 +1,208 @@
+:root {
+  font-family: Inter, "Segoe UI", Roboto, sans-serif;
+  color: #0f172a;
+  background: #f4f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef3f9 100%);
+  color: #0f172a;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  height: 100vh;
+}
+
+.erp-shell {
+  height: 100vh;
+  background: #f4f7fb;
+}
+
+.top-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  height: 64px;
+  background: rgba(15, 23, 42, 0.96);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(10px);
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.brand-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.brand-subtitle {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.top-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nav-pill {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: transparent;
+  color: #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.nav-pill:hover,
+.nav-pill.active {
+  background: rgba(56, 189, 248, 0.2);
+  color: #fff;
+}
+
+.erp-body {
+  display: flex;
+  height: calc(100vh - 64px);
+  padding-top: 64px;
+}
+
+.sidebar-panel {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  padding: 22px 16px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  box-shadow: 8px 0 24px rgba(15, 23, 42, 0.04);
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 8px 10px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+}
+
+.sidebar-header h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.sidebar-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  text-decoration: none;
+  color: #334155;
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.main-content-shell {
+  flex: 1;
+  min-width: 0;
+  margin-left: 240px;
+  padding: 24px;
+  background: transparent;
+  overflow-y: auto;
+}
+
+.content-scroll-area {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.main-content-shell > .content-scroll-area > * {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  padding: 20px;
+}
+
+@media (max-width: 1024px) {
+  .top-navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 12px 16px;
+  }
+
+  .erp-body {
+    padding-top: 112px;
+    height: calc(100vh - 112px);
+  }
+
+  .sidebar-panel {
+    top: 112px;
+    width: 220px;
+  }
+
+  .main-content-shell {
+    margin-left: 220px;
+    padding: 16px;
+  }
+}

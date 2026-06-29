@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { db } from "../data/db";
+import "./Reports.css";
 
 function ViewCuttingVouchers() {
   const [entries, setEntries] = useState([]);
@@ -99,164 +99,168 @@ function ViewCuttingVouchers() {
     loadEntries();
   };
     return (
-    <div style={{ padding: 20 }}>
-      <Link to="/fab">
-        <button>← FAB GRIN</button>
-      </Link>
+    <div className="data-page">
+      <div className="data-page-header">
+        <div>
+          <p className="report-kicker">Records</p>
+          <h1 className="data-page-title">View Cutting Vouchers</h1>
+        </div>
+      </div>
 
-      <h1>View Cutting Vouchers</h1>
+      <div className="data-toolbar">
+        <input
+          className="data-search"
+          type="text"
+          placeholder="Search Roll No / Pattern / Article No"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Search Roll No / Pattern / Article No"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: 300,
-          marginBottom: 20,
-          padding: 8,
-        }}
-      />
-
-      <table
-        border="1"
-        cellPadding="8"
-        style={{
-          borderCollapse: "collapse",
-          width: "100%",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Roll</th>
-            <th>Article</th>
-            <th>Pattern</th>
-            <th>Sheet</th>
-            <th>Category</th>
-            <th>Party</th>
-            <th>Meter Cut</th>
-            <th>PCS Cut</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filteredEntries.map((entry) => (
-            <tr key={entry.id}>
-              {editingId === entry.id ? (
-                <>
-                  <td>
-                    <input
-                      name="date"
-                      value={editData.date}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="rollNo"
-                      value={editData.rollNo}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="articleNo"
-                      value={editData.articleNo}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="pattern"
-                      value={editData.pattern}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="sheetNo"
-                      value={editData.sheetNo}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="category"
-                      value={editData.category}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="party"
-                      value={editData.party}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="meterCut"
-                      value={editData.meterCut}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      name="pcsCut"
-                      value={editData.pcsCut}
-                      onChange={handleChange}
-                    />
-                  </td>
-
-                  <td>
-                    <button onClick={saveEdit}>Save</button>
-                    <button onClick={cancelEdit}>Cancel</button>
-                  </td>
-
-                  <td></td>
-                </>
-              ) : (
-                <>
-                  <td>{entry.date}</td>
-                  <td>{entry.rollNo}</td>
-                  <td>{entry.articleNo}</td>
-                  <td>{entry.pattern}</td>
-                  <td>{entry.sheetNo}</td>
-                  <td>{entry.category}</td>
-                  <td>{entry.party}</td>
-                  <td>{entry.meterCut}</td>
-                  <td>{entry.pcsCut}</td>
-
-                  <td>
-                    <button onClick={() => startEdit(entry)}>
-                      Edit
-                    </button>
-                  </td>
-
-                  <td>
-                    <button
-                      onClick={() => deleteEntry(entry.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </>
-              )}
+      <div className="data-table-shell">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Roll</th>
+              <th>Article</th>
+              <th>Pattern</th>
+              <th>Sheet</th>
+              <th>Category</th>
+              <th>Party</th>
+              <th>Meter Cut</th>
+              <th>PCS Cut</th>
+              <th>Edit</th>
+              <th>Delete</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {filteredEntries.map((entry) => (
+              <tr key={entry.id} className={editingId === entry.id ? "data-row-editing" : ""}>
+                {editingId === entry.id ? (
+                  <>
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="date"
+                        value={editData.date}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="rollNo"
+                        value={editData.rollNo}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="articleNo"
+                        value={editData.articleNo}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="pattern"
+                        value={editData.pattern}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="sheetNo"
+                        value={editData.sheetNo}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="category"
+                        value={editData.category}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="party"
+                        value={editData.party}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="meterCut"
+                        value={editData.meterCut}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        className="data-inline-field"
+                        name="pcsCut"
+                        value={editData.pcsCut}
+                        onChange={handleChange}
+                      />
+                    </td>
+
+                    <td>
+                      <button className="action-button primary" onClick={saveEdit}>Save</button>
+                      <button className="action-button secondary" onClick={cancelEdit}>Cancel</button>
+                    </td>
+
+                    <td></td>
+                  </>
+                ) : (
+                  <>
+                    <td>{entry.date}</td>
+                    <td>{entry.rollNo}</td>
+                    <td>{entry.articleNo}</td>
+                    <td>{entry.pattern}</td>
+                    <td>{entry.sheetNo}</td>
+                    <td>{entry.category}</td>
+                    <td>{entry.party}</td>
+                    <td>{entry.meterCut}</td>
+                    <td>{entry.pcsCut}</td>
+
+                    <td>
+                      <button className="action-button secondary" onClick={() => startEdit(entry)}>
+                        Edit
+                      </button>
+                    </td>
+
+                    <td>
+                      <button
+                        className="action-button danger"
+                        onClick={() => deleteEntry(entry.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

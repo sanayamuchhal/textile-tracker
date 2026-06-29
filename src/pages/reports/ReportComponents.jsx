@@ -1,36 +1,33 @@
-import { Link } from "react-router-dom";
+import "../Reports.css";
 
 export function ReportPage({ title, filters, rows, onExport, children }) {
   return (
-    <div style={{ padding: 20 }}>
-      <Link to="/reports">
-        <button>Back to Reports</button>
-      </Link>
-
-      <h1>{title}</h1>
-
-      {filters && (
-        <div style={{ marginBottom: 16 }}>
-          {filters}
+    <div className="report-shell">
+      <div className="report-toolbar">
+        <div>
+          <p className="report-kicker">Reports</p>
+          <h1 className="report-title">{title}</h1>
         </div>
-      )}
+        <button className="report-export-button" onClick={onExport}>
+          Export to Excel
+        </button>
+      </div>
+
+      {filters && <div className="report-filter-bar">{filters}</div>}
 
       {children}
 
-      <button onClick={onExport} style={{ marginBottom: 12 }}>
-        Export to Excel
-      </button>
-
-      <ReportTable rows={rows} />
+      <div className="report-section">
+        <ReportTable rows={rows} />
+      </div>
     </div>
   );
 }
 
 export function SelectFilter({ label, value, options, onChange }) {
   return (
-    <label style={{ display: "inline-block", marginRight: 12, marginBottom: 10 }}>
-      {label}
-      <br />
+    <label className="report-filter-field">
+      <span>{label}</span>
       <select value={value} onChange={(e) => onChange(e.target.value)}>
         <option value="">All</option>
         {options.map((option) => (
@@ -47,12 +44,8 @@ export function ReportTable({ rows }) {
   const columns = rows.length ? Object.keys(rows[0]) : [];
 
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ borderCollapse: "collapse", minWidth: "100%" }}
-      >
+    <div className="report-table-wrapper">
+      <table className="report-table">
         <thead>
           <tr>
             {columns.map((column) => (
@@ -72,7 +65,7 @@ export function ReportTable({ rows }) {
 
           {rows.length === 0 && (
             <tr>
-              <td colSpan={Math.max(columns.length, 1)}>
+              <td className="report-empty" colSpan={Math.max(columns.length, 1)}>
                 No records found
               </td>
             </tr>

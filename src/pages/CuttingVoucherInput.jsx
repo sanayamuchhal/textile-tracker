@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { db } from "../data/db";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import "./entryForms.css";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -115,57 +115,71 @@ function CuttingVoucherInput() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <Link to="/fab">
-        <button>Back to FAB GRIN</button>
-      </Link>
+    <div className="entry-page">
+      <div className="entry-container">
+        <h1 className="entry-title">Cutting Voucher</h1>
 
-      <h1>Cutting Voucher</h1>
+        <div className="entry-field">
+          <label className="entry-label">Date</label>
+          <input className="entry-input" type="date" name="date" value={form.date} onChange={handleChange} />
+        </div>
 
-      <div style={{ maxWidth: 520 }}>
-        <label>Date</label>
-        <input type="date" name="date" value={form.date} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Roll Number</label>
+          <input className="entry-input" list="cuttingRolls" name="rollNo" value={form.rollNo} onChange={handleChange} />
+          <datalist id="cuttingRolls">
+            {rolls.map((roll) => (
+              <option key={roll.id} value={roll.rollNo} />
+            ))}
+          </datalist>
+        </div>
 
-        <label>Roll Number</label>
-        <input list="cuttingRolls" name="rollNo" value={form.rollNo} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
-        <datalist id="cuttingRolls">
-          {rolls.map((roll) => (
-            <option key={roll.id} value={roll.rollNo} />
-          ))}
-        </datalist>
+        <div className="entry-field">
+          <label className="entry-label">GRIN</label>
+          <input className="entry-input" name="grinNo" value={form.grinNo} readOnly />
+        </div>
 
-        <label>GRIN</label>
-        <input name="grinNo" value={form.grinNo} readOnly style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Category</label>
+          <input className="entry-input" name="category" value={form.category} readOnly />
+        </div>
 
-        <label>Category</label>
-        <input name="category" value={form.category} readOnly style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Party</label>
+          <input className="entry-input" name="party" value={form.party} readOnly />
+        </div>
 
-        <label>Party</label>
-        <input name="party" value={form.party} readOnly style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Meter</label>
+          <input className="entry-input" name="meter" value={form.meter} readOnly />
+        </div>
 
-        <label>Meter</label>
-        <input name="meter" value={form.meter} readOnly style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Meter Cut</label>
+          <input className="entry-input" type="number" name="meterCut" value={form.meterCut} onChange={handleChange} />
+        </div>
 
-        <label>Meter Cut</label>
-        <input type="number" name="meterCut" value={form.meterCut} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">PCS Cut</label>
+          <input className="entry-input" type="number" name="pcsCut" value={form.pcsCut} onChange={handleChange} />
+        </div>
 
-        <label>PCS Cut</label>
-        <input type="number" name="pcsCut" value={form.pcsCut} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Pattern</label>
+          <input className="entry-input" name="pattern" value={form.pattern} onChange={handleChange} />
+        </div>
 
-        <label>Pattern</label>
-        <input name="pattern" value={form.pattern} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
-        <label>Article No</label>
-<input
-  name="articleNo"
-  value={form.articleNo}
-  readOnly
-  style={{ width: "100%", marginBottom: 10 }}
-/>
+        <div className="entry-field">
+          <label className="entry-label">Article No</label>
+          <input className="entry-input" name="articleNo" value={form.articleNo} readOnly />
+        </div>
 
-        <label>Sheet Number</label>
-        <input name="sheetNo" value={form.sheetNo} onChange={handleChange} style={{ width: "100%", marginBottom: 10 }} />
+        <div className="entry-field">
+          <label className="entry-label">Sheet Number</label>
+          <input className="entry-input" name="sheetNo" value={form.sheetNo} onChange={handleChange} />
+        </div>
 
-        <button onClick={saveVoucher}>Save Cutting Voucher</button>
+        <button className="entry-button" onClick={saveVoucher}>Save Cutting Voucher</button>
       </div>
     </div>
   );
