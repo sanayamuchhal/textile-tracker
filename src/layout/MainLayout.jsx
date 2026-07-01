@@ -12,23 +12,30 @@ function MainLayout({ children }) {
 
     if (path === "/") {
       setActiveModule("dashboard");
-    } else if (path.startsWith("/add") || path === "/var" || path === "/view") {
+    } else if (
+      path === "/reports" ||
+      path.startsWith("/reports") ||
+      path === "/weekly-report" ||
+      path === "/required-reports" ||
+      path === "/view" ||
+      path === "/fab/view" ||
+      path === "/view-cutting-vouchers" ||
+      path === "/view-cash-entries"
+    ) {
+      setActiveModule("reports");
+    } else if (path.startsWith("/add") || path === "/var") {
       setActiveModule("var");
     } else if (
-      path.startsWith("/fab") ||
-      path === "/fab-grin-pivot-report" ||
-      path === "/view-cutting-vouchers"
+      (path.startsWith("/fab") && path !== "/fab/view") ||
+      path === "/fab-grin-pivot-report"
     ) {
       setActiveModule("fab");
     } else if (
       path === "/cash-book" ||
       path === "/cash-entry" ||
-      path === "/view-cash-entries" ||
       path === "/bank-withdrawal"
     ) {
       setActiveModule("cash");
-    } else if (path.startsWith("/reports") || path === "/weekly-report" || path === "/required-reports") {
-      setActiveModule("reports");
     } else if (path === "/export") {
       setActiveModule("export");
     }

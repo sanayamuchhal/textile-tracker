@@ -117,8 +117,8 @@ button {
   top: 64px;
   left: 0;
   bottom: 0;
-  width: 240px;
-  padding: 22px 16px;
+  width: 280px;
+  padding: 22px 18px;
   background: #ffffff;
   border-right: 1px solid #e2e8f0;
   box-shadow: 8px 0 24px rgba(15, 23, 42, 0.04);
@@ -151,9 +151,10 @@ button {
 .sidebar-link {
   text-decoration: none;
   color: #334155;
-  padding: 10px 12px;
+  padding: 10px 14px;
   border-radius: 12px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .sidebar-link:hover,
@@ -166,7 +167,7 @@ button {
 .main-content-shell {
   flex: 1;
   min-width: 0;
-  margin-left: 240px;
+  margin-left: 280px;
   padding: 24px;
   background: transparent;
   overflow-y: auto;
@@ -183,7 +184,55 @@ button {
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
   padding: 20px;
 }
+/* Reports sidebar */
 
+.report-group {
+  margin-bottom: 18px;
+}
+
+.report-heading {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  cursor: pointer;
+
+  padding: 10px 12px;
+
+  font-size: 15px;
+  font-weight: 700;
+  color: #334155;
+
+  border-radius: 8px;
+
+  transition: background 0.2s ease;
+}
+
+.report-heading:hover {
+  background: #f8fafc;
+}
+
+.report-items {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.report-items .sidebar-link {
+  display: block;
+  width: 100%;
+  padding: 8px 10px 8px 24px;
+  white-space: nowrap;
+}
+
+.report-items .sidebar-link:hover {
+  background: #eff6ff;
+}
 @media (max-width: 1024px) {
   .top-navbar {
     flex-wrap: wrap;
