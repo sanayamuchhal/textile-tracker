@@ -15,18 +15,38 @@ function FabEntry() {
   });
 
   const [roll, setRoll] = useState({
-  rollNo: "",
-  quality: "",
-  meter: "",
-  rate: "",
-  category: "",
-});
+    rollNo: "",
+    quality: "",
+    meter: "",
+    rate: "",
+    category: "",
+  });
 
-
+  const [parties, setParties] = useState([]);
   const [savedRolls, setSavedRolls] = useState([]);
+
   useEffect(() => {
-  loadNextNumbers();
-}, []);
+    loadNextNumbers();
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadParties = async () => {
+      const data = await db.parties.toArray();
+      if (active) {
+        setParties(data);
+      }
+    };
+
+    loadParties();
+    const interval = setInterval(loadParties, 2500);
+
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
 
 const loadNextNumbers = async () => {
   const entries = await db.fabEntries.toArray();
@@ -155,7 +175,26 @@ const finishGrin = async () => {
 
         <div className="entry-field">
           <label className="entry-label">Party</label>
-          <input className="entry-input" name="party" placeholder="Party" value={grinDetails.party} onChange={handleGrinChange} />
+          <select
+            className="entry-input"
+            name="party"
+            value={grinDetails.party}
+            onChange={handleGrinChange}
+            disabled={parties.length === 0}
+          >
+            {parties.length === 0 ? (
+              <option value="">No parties available</option>
+            ) : (
+              <>
+                <option value="">-- Select Party --</option>
+                {parties.map((party) => (
+                  <option key={party.id} value={party.name}>
+                    {party.name}
+                  </option>
+                ))}
+              </>
+            )}
+          </select>
         </div>
 
         <div className="entry-field">

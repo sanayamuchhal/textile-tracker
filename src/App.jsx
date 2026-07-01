@@ -30,6 +30,8 @@ import WagesReport from "./pages/reports/WagesReport";
 import CashBookReport from "./pages/reports/CashBookReport";
 import ProductCostSummary from "./pages/reports/ProductCostSummary";
 import VarCostDetail from "./pages/reports/VarCostDetail";
+import MastersLock from "./pages/MastersLock";
+import PartyMaster from "./pages/PartyMaster";
 import Export from "./pages/Export";
 
 function App() {
@@ -62,6 +64,10 @@ function App() {
         <Route path="/cash-entry" element={withLayout(<AddCashEntry />)} />
         <Route path="/view-cash-entries" element={withLayout(<ViewCashEntries />)} />
         <Route path="/bank-withdrawal" element={withLayout(<BankWithdrawal />)} />
+
+        {/* Masters */}
+        <Route path="/masters" element={withLayout(<MastersLock />)} />
+        <Route path="/masters/party" element={withLayout(<PartyMaster />)} />
 
         {/* Reports */}
         <Route path="/reports" element={withLayout(<CashBookReport />)} />

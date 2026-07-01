@@ -22,6 +22,14 @@ const moduleSections = {
     { label: "Bank Withdrawal", path: "/bank-withdrawal" },
   ],
 
+  masters: [
+    {
+      heading: "MASTERS",
+      children: [
+        { label: "Party Master", path: "/masters/party" },
+      ],
+    },
+  ],
   reports: [
     {
       heading: "VAR Challan",
@@ -62,8 +70,6 @@ function Sidebar({ activeModule }) {
   const location = useLocation();
   const items = moduleSections[activeModule] || [];
 
-  const [openSection, setOpenSection] = useState("VAR Challan");
-
   return (
     <aside className="sidebar-panel">
       <div className="sidebar-header">
@@ -76,55 +82,35 @@ function Sidebar({ activeModule }) {
       </div>
 
       <nav className="sidebar-links">
-        {activeModule !== "reports" ? (
-          items.map((item) => {
-            const isActive = location.pathname === item.path;
-
+        {items.map((sectionOrItem) => {
+          if (sectionOrItem.heading) {
             return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`sidebar-link ${isActive ? "active" : ""}`}
-              >
-                {item.label}
-              </Link>
+              <div key={sectionOrItem.heading} className="report-group">
+                <div className="report-heading">{sectionOrItem.heading}</div>
+                {sectionOrItem.children.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`sidebar-link ${location.pathname === item.path ? "active" : ""}`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
             );
-          })
-        ) : (
-          items.map((section) => (
-            <div key={section.heading} className="report-group">
-              <button
-                className="report-heading"
-                onClick={() =>
-                  setOpenSection(
-                    openSection === section.heading ? "" : section.heading
-                  )
-                }
-              >
-                <span>{section.heading}</span>
-                <span>
-                  {openSection === section.heading ? "▼" : "▶"}
-                </span>
-              </button>
+          }
 
-              {openSection === section.heading && (
-                <div className="report-items">
-                  {section.children.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={`sidebar-link ${
-                        location.pathname === item.path ? "active" : ""
-                      }`}
-                    >
-                      • {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))
-        )}
+          const isActive = location.pathname === sectionOrItem.path;
+          return (
+            <Link
+              key={sectionOrItem.path}
+              to={sectionOrItem.path}
+              className={`sidebar-link ${isActive ? "active" : ""}`}
+            >
+              {sectionOrItem.label}
+            </Link>
+          );
+        })}
       </nav>
     </aside>
   );

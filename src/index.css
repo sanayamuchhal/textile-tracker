@@ -112,7 +112,123 @@ button {
   padding-top: 64px;
 }
 
-.sidebar-panel {
+.masters-lock-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: 24px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.master-card {
+  width: min(460px, 100%);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  padding: 32px;
+}
+
+.master-card-header h2 {
+  margin: 0 0 8px;
+  font-size: 26px;
+}
+
+.master-card-subtitle {
+  margin: 0;
+  color: #64748b;
+}
+
+.master-lock-form {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.master-label {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.master-input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+}
+
+.master-error {
+  color: #b91c1c;
+  font-size: 0.95rem;
+}
+
+.master-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.data-page-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.master-form-card,
+.master-table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  padding: 24px;
+}
+
+.card-header {
+  margin-bottom: 18px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.master-field {
+  margin-bottom: 16px;
+}
+
+.master-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-weight: 600;
+}
+
+.master-field input,
+.master-field textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.master-field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.report-table th,
+.report-table td {
+  padding: 12px 14px;
+}
+
+.report-table th {
+  font-size: 12px;
+}
+  .sidebar-panel {
   position: fixed;
   top: 64px;
   left: 0;
@@ -171,6 +287,10 @@ button {
   padding: 24px;
   background: transparent;
   overflow-y: auto;
+}
+
+.main-content-shell.no-sidebar {
+  margin-left: 0;
 }
 
 .content-scroll-area {
