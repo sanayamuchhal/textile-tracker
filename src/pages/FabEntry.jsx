@@ -158,103 +158,124 @@ const finishGrin = async () => {
 
   return (
     <div className="entry-page">
-      <div className="entry-container">
-        <h1 className="entry-title">FAB Entry</h1>
-
-        <h3 className="entry-label">GRIN Details</h3>
-
-        <div className="entry-field">
-          <label className="entry-label">Date</label>
-          <input className="entry-input" type="date" name="date" value={grinDetails.date} onChange={handleGrinChange} />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">GRIN No</label>
-          <input className="entry-input" name="grinNo" value={grinDetails.grinNo} readOnly />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Party</label>
-          <select
-            className="entry-input"
-            name="party"
-            value={grinDetails.party}
-            onChange={handleGrinChange}
-            disabled={parties.length === 0}
-          >
-            {parties.length === 0 ? (
-              <option value="">No parties available</option>
-            ) : (
-              <>
-                <option value="">-- Select Party --</option>
-                {parties.map((party) => (
-                  <option key={party.id} value={party.name}>
-                    {party.name}
-                  </option>
-                ))}
-              </>
-            )}
-          </select>
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Invoice</label>
-          <input className="entry-input" name="invoice" placeholder="Invoice" value={grinDetails.invoice} onChange={handleGrinChange} />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Sheet Number</label>
-          <input className="entry-input" name="sheetNo" placeholder="Sheet Number" value={grinDetails.sheetNo} onChange={handleGrinChange} />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Category</label>
-          <input className="entry-input" name="category" placeholder="Category" value={grinDetails.category} onChange={handleGrinChange} />
-        </div>
-
-        <h3 className="entry-label">Current Roll</h3>
-
-        <div className="entry-field">
-          <label className="entry-label">Roll No</label>
-          <input className="entry-input" name="rollNo" value={roll.rollNo} readOnly />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Quality</label>
-          <input className="entry-input" name="quality" placeholder="Quality" value={roll.quality} onChange={handleRollChange} />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Meter</label>
-          <input className="entry-input" name="meter" placeholder="Meter" value={roll.meter} onChange={handleRollChange} />
-        </div>
-
-        <div className="entry-field">
-          <label className="entry-label">Rate</label>
-          <input className="entry-input" name="rate" placeholder="Rate" value={roll.rate} onChange={handleRollChange} />
-        </div>
-
-        <p className="entry-summary">Value : ₹ {value}</p>
-
-        <button className="entry-button" onClick={saveRoll}>Save Roll</button>
-        <div className="entry-field" />
-        <button className="entry-button" onClick={finishGrin}>Finish GRIN</button>
-
-        <div className="entry-field" />
-
-        <h2 className="entry-title">Added Rolls</h2>
-
-        {savedRolls.length === 0 && <p className="entry-helper">No rolls added.</p>}
-
-        {savedRolls.map((item, index) => (
-          <div key={index} style={{ border: "1px solid #cbd5e1", borderRadius: 4, padding: 10, marginBottom: 8, background: "#ffffff" }}>
-            <p className="entry-helper"><strong>Roll No:</strong> {item.rollNo}</p>
-            <p className="entry-helper"><strong>Quality:</strong> {item.quality}</p>
-            <p className="entry-helper"><strong>Meter:</strong> {item.meter}</p>
-            <p className="entry-helper"><strong>Rate:</strong> {item.rate}</p>
-            <p className="entry-helper"><strong>Value:</strong> ₹{item.value}</p>
+      <div className="entry-container fab-entry-sheet">
+        <div className="fab-entry-header">
+          <div className="fab-entry-title-row">
+            <h1 className="entry-title fab-entry-title">FAB GRIN Entry</h1>
+            <div className="fab-entry-status">ERP Data Sheet</div>
           </div>
-        ))}
+
+          <div className="fab-entry-grid">
+            <div className="fab-entry-field">
+              <label className="entry-label">Date</label>
+              <input className="entry-input" type="date" name="date" value={grinDetails.date} onChange={handleGrinChange} />
+            </div>
+
+            <div className="fab-entry-field">
+              <label className="entry-label">GRIN No.</label>
+              <input className="entry-input" name="grinNo" value={grinDetails.grinNo} readOnly />
+            </div>
+
+            <div className="fab-entry-field">
+              <label className="entry-label">Party</label>
+              <select
+                className="entry-input"
+                name="party"
+                value={grinDetails.party}
+                onChange={handleGrinChange}
+                disabled={parties.length === 0}
+              >
+                {parties.length === 0 ? (
+                  <option value="">No parties available</option>
+                ) : (
+                  <>
+                    <option value="">-- Select Party --</option>
+                    {parties.map((party) => (
+                      <option key={party.id} value={party.name}>
+                        {party.name}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </select>
+            </div>
+
+            <div className="fab-entry-field">
+              <label className="entry-label">Bill No.</label>
+              <input className="entry-input" name="invoice" placeholder="Bill No." value={grinDetails.invoice} onChange={handleGrinChange} />
+            </div>
+
+            <div className="fab-entry-field">
+              <label className="entry-label">Category</label>
+              <input className="entry-input" name="category" placeholder="Category" value={grinDetails.category} onChange={handleGrinChange} />
+            </div>
+
+            <div className="fab-entry-field">
+              <label className="entry-label">Sheet No.</label>
+              <input className="entry-input" name="sheetNo" placeholder="Sheet Number" value={grinDetails.sheetNo} onChange={handleGrinChange} />
+            </div>
+          </div>
+        </div>
+
+        <div className="fab-entry-table-wrap">
+          <table className="fab-entry-table">
+            <thead>
+              <tr>
+                <th>Quality</th>
+                <th>MTR</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>GST (5%)</th>
+                <th>Total Amount</th>
+                <th>Roll No.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {savedRolls.map((item, index) => (
+                <tr key={`saved-${index}`}>
+                  <td>{item.quality}</td>
+                  <td>{item.meter}</td>
+                  <td>{item.rate}</td>
+                  <td>₹{item.value}</td>
+                  <td>₹{Number((item.value * 0.05).toFixed(2))}</td>
+                  <td>₹{Number((item.value + item.value * 0.05).toFixed(2))}</td>
+                  <td>{item.rollNo}</td>
+                </tr>
+              ))}
+
+              <tr className="fab-entry-active-row">
+                <td>
+                  <input className="entry-input spreadsheet-cell" name="quality" placeholder="Quality" value={roll.quality} onChange={handleRollChange} />
+                </td>
+                <td>
+                  <input className="entry-input spreadsheet-cell" name="meter" placeholder="Meter" value={roll.meter} onChange={handleRollChange} />
+                </td>
+                <td>
+                  <input className="entry-input spreadsheet-cell" name="rate" placeholder="Rate" value={roll.rate} onChange={handleRollChange} />
+                </td>
+                <td>
+                  <input className="entry-input spreadsheet-cell" value={value} readOnly />
+                </td>
+                <td>
+                  <input className="entry-input spreadsheet-cell" value={Number((value * 0.05).toFixed(2))} readOnly />
+                </td>
+                <td>
+                  <input className="entry-input spreadsheet-cell" value={Number((value + value * 0.05).toFixed(2))} readOnly />
+                </td>
+                <td>
+                  <input className="entry-input spreadsheet-cell" name="rollNo" value={roll.rollNo} readOnly />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="fab-entry-actions">
+          <button className="entry-button fab-entry-action-button" onClick={saveRoll}>Save Roll</button>
+          <button className="entry-button fab-entry-action-button" onClick={finishGrin}>Save GRIN</button>
+        </div>
+
+        {savedRolls.length === 0 && <p className="entry-helper fab-entry-helper">No rolls added yet.</p>}
       </div>
     </div>
   );

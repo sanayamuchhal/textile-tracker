@@ -307,7 +307,11 @@ button {
 /* Reports sidebar */
 
 .report-group {
-  margin-bottom: 18px;
+  margin-bottom: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
 }
 
 .report-heading {
@@ -315,43 +319,64 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  background: transparent;
+  background: #f8fafc;
   border: none;
   outline: none;
-
   cursor: pointer;
-
   padding: 10px 12px;
-
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #334155;
-
-  border-radius: 8px;
-
+  border-radius: 0;
   transition: background 0.2s ease;
 }
 
 .report-heading:hover {
-  background: #f8fafc;
+  background: #f1f5f9;
 }
 
 .report-items {
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
+  gap: 2px;
+  padding: 4px 6px 8px;
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
+}
+
+.report-items.closed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.report-items.open {
+  max-height: 260px;
+  opacity: 1;
+  padding-top: 4px;
+  padding-bottom: 8px;
 }
 
 .report-items .sidebar-link {
   display: block;
   width: 100%;
-  padding: 8px 10px 8px 24px;
+  padding: 8px 10px 8px 22px;
   white-space: nowrap;
+  border-radius: 10px;
+  color: #475569;
+  font-size: 0.92rem;
 }
 
 .report-items .sidebar-link:hover {
   background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.report-items .sidebar-link.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 600;
 }
 @media (max-width: 1024px) {
   .top-navbar {
