@@ -168,3 +168,33 @@ db.version(14).stores({
 
   parties: "++id,name,address,contactPerson,mobile,gst",
 });
+
+db.version(15).stores({
+  entries:
+    "++id,date,month,week,challanNo,workerName,sheetNo,rollNo,articleNo,pattern,jobType,pcs,rate,amount",
+
+  fabEntries:
+    "++id,date,month,week,grinNo,sheetNo,rollNo,party,invoice,category,quality,meter,rate,value,average",
+
+  workers: "++id,name",
+
+  jobs: "++id,name",
+
+  workerPayments:
+    "++id,[workerName+week],workerName,week,balance,month",
+
+  cashEntries:
+    "++id,voucherNo,date,month,week,type,category,name,bankName,amount,narration,chequeNo,balance,source,referenceId",
+
+  cashCategories: "++id,name",
+
+  cashBanks: "++id,name",
+
+  fabricReturns:
+    "++id,voucherNo,date,month,party,category,quality,debitNo,rollNo",
+
+  cuttingVouchers:
+    "++id,date,month,week,rollNo,grinNo,category,party,pattern,articleNo,sheetNo",
+
+  parties: "++id,name,address,contactPerson,mobile,gst",
+});

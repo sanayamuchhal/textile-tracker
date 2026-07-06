@@ -9,6 +9,7 @@ const today = new Date().toISOString().split("T")[0];
 function AddEntry() {
   const [workers, setWorkers] = useState([]);
   const [jobs, setJobs] = useState([]);
+  const [fabEntries, setFabEntries] = useState([]);
   const [cuttingVouchers, setCuttingVouchers] = useState([]);
   const [newWorker, setNewWorker] = useState("");
   const [newJob, setNewJob] = useState("");
@@ -56,68 +57,44 @@ function AddEntry() {
       await seedJobs();
 
       setWorkers(await db.workers.toArray());
-setJobs(await db.jobs.toArray());
+      setJobs(await db.jobs.toArray());
 
-const vouchers = await db.cuttingVouchers.toArray();
-setCuttingVouchers(vouchers);
+      const [fabData, voucherData] = await Promise.all([
+        db.fabEntries.toArray(),
+        db.cuttingVouchers.toArray(),
+      ]);
 
-await loadNextChallan();
+      setFabEntries(fabData);
+      setCuttingVouchers(voucherData);
+
+      await loadNextChallan();
     })();
   }, []);
   const uniqueRolls = [
-  ...new Set(cuttingVouchers.map(v => String(v.rollNo)))
-];
-const availableArticles = cuttingVouchers.filter(
-  (v) => String(v.rollNo) === String(formData.rollNo)
-);
-const handleChange = (e) => {
+    ...new Set(fabEntries.map((entry) => String(entry.rollNo)).filter(Boolean)),
+  ].sort((a, b) => Number(a) - Number(b));
+
+  const handleChange = (e) => {
   const { name, value } = e.target;
 
-  // Roll Number changed
   if (name === "rollNo") {
-    const articles = cuttingVouchers.filter(
-      (v) => String(v.rollNo) === String(value)
+    const matchingFabEntry = fabEntries.find(
+      (entry) => String(entry.rollNo) === String(value)
     );
-
-    if (articles.length > 0) {
-      const first = articles[0];
-
-      setFormData((prev) => ({
-  ...prev,
-  rollNo: value,
-  articleNo: String(first.articleNo),
-  pattern: first.pattern || "",
-}));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        rollNo: value,
-        articleNo: "",
-        pattern: "",
-        sheetNo: "",
-      }));
-    }
-
-    return;
-  }
-
-  // Article Number changed
-  if (name === "articleNo") {
-    const article = cuttingVouchers.find(
-      (v) =>
-        String(v.rollNo) === String(formData.rollNo) &&
-        String(v.articleNo) === String(value)
+    const matchingVoucher = cuttingVouchers.find(
+      (voucher) => String(voucher.rollNo) === String(value)
     );
 
     setFormData((prev) => ({
-  ...prev,
-  articleNo: value,
-  pattern: article?.pattern || "",
-}));
+      ...prev,
+      rollNo: value,
+      articleNo: matchingFabEntry?.articleNo || "",
+      pattern: matchingVoucher?.pattern || "",
+    }));
+
     return;
   }
 
-  // Everything else
   setFormData((prev) => ({
     ...prev,
     [name]: value,
@@ -184,7 +161,7 @@ const addWorker = async () => {
     week: getWeek(formData.date),
 
     challanNo: Number(formData.challanNo),
-    articleNo: Number(formData.articleNo),
+    articleNo: formData.articleNo || "",
 
     amount,
   });
@@ -206,6 +183,7 @@ const addWorker = async () => {
   });
 
   await loadNextChallan();
+  setFabEntries(await db.fabEntries.toArray());
   setCuttingVouchers(await db.cuttingVouchers.toArray());
 };
 
@@ -280,14 +258,13 @@ const addWorker = async () => {
 
         <div className="entry-field">
           <label className="entry-label">Article Number</label>
-          <select className="entry-select" name="articleNo" value={formData.articleNo} onChange={handleChange}>
-            <option value="">Select Article</option>
-            {availableArticles.map((article) => (
-              <option key={`${article.rollNo}-${article.articleNo}`} value={article.articleNo}>
-                {article.articleNo}
-              </option>
-            ))}
-          </select>
+          <input
+            className="entry-input"
+            name="articleNo"
+            value={formData.articleNo}
+            readOnly
+            placeholder="Article Number"
+          />
         </div>
 
         <div className="entry-field">

@@ -50,17 +50,15 @@ export function buildCuttingRows(cuttingVouchers) {
     return {
       Date: entry.date,
       Month: entry.month,
-      Week: entry.week,
 
       "GRIN No": entry.grinNo,
+      "Sheet No": entry.sheetNo,
       "Roll Number": entry.rollNo,
-
-      Category: entry.category,
-      Party: entry.party,
 
       "Article No": entry.articleNo,
       Pattern: entry.pattern,
-      "Sheet No": entry.sheetNo,
+      Party: entry.party,
+      Category: entry.category,
 
       Meter: meter,
       "PCS Cut": number(entry.pcsCut),
@@ -273,47 +271,49 @@ export function buildProductCostRows(
   cuttingVouchers,
   entries
 ) {
-  return cuttingVouchers.map((cutting) => {
-    const fab = fabEntries.find(
-      (f) => String(f.rollNo) === String(cutting.rollNo)
-    );
+  return cuttingVouchers
+    .map((cutting) => {
+      const fab = fabEntries.find(
+        (f) => String(f.rollNo) === String(cutting.rollNo)
+      );
 
-    if (!fab) return null;
+      if (!fab) return null;
 
-    const { meterCut, pcsCut, varAmount } = rollCutSummary(
-      cutting,
-      entries
-    );
+      const { meterCut, pcsCut, varAmount } = rollCutSummary(
+        cutting,
+        entries
+      );
 
-    return {
-      "Roll Number": cutting.rollNo,
-      "Article No": cutting.articleNo,
-
-      Category: cutting.category,
-      Pattern: cutting.pattern,
-      Party: cutting.party,
-
-      "Fabric Rate": number(fab.rate),
-
-      "Meter Cut": meterCut,
-
-      "PCS Cut": pcsCut,
-
-      "VAR Amount": varAmount,
-
-      "VAR Cost Per Piece":
+      const varCostPerPiece =
+        pcsCut > 0 ? Number((varAmount / pcsCut).toFixed(2)) : 0;
+      const fabricCostPerPiece =
         pcsCut > 0
-          ? Number((varAmount / pcsCut).toFixed(2))
-          : 0,
+          ? Number(((number(fab.rate) * meterCut) / pcsCut).toFixed(2))
+          : 0;
+      const total = Number((varCostPerPiece + fabricCostPerPiece).toFixed(2));
 
-      "Fabric Cost Per Piece":
-        pcsCut > 0
-          ? Number(
-              ((number(fab.rate) * meterCut) / pcsCut).toFixed(2)
-            )
-          : 0,
-    };
-  }).filter(Boolean);
+      return {
+        "Roll Number": cutting.rollNo,
+        "Article No": cutting.articleNo,
+
+        Category: cutting.category,
+        Pattern: cutting.pattern,
+        Party: cutting.party,
+
+        "Fabric Rate": number(fab.rate),
+
+        "Meter Cut": meterCut,
+
+        "PCS Cut": pcsCut,
+
+        "VAR Amount": varAmount,
+
+        "VAR Cost/PC": varCostPerPiece,
+        "FAB Cost/PC": fabricCostPerPiece,
+        Total: total,
+      };
+    })
+    .filter(Boolean);
 }
 export function buildVarCostDetail(cuttingVoucher, entries) {
   if (!cuttingVoucher) {

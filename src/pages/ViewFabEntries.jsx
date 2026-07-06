@@ -92,8 +92,6 @@ const cancelEdit = () => {
               <th>Date</th>
               <th>Month</th>
               <th>GRIN</th>
-              <th>Roll</th>
-              <th>Sheet No</th>
               <th>Party</th>
               <th>Invoice</th>
               <th>Category</th>
@@ -103,8 +101,10 @@ const cancelEdit = () => {
               <th>Value</th>
               <th>Return Meter</th>
               <th>PCS Cut</th>
-              <th>Delete</th>
+              <th>Roll No</th>
+              <th>Sheet No</th>
               <th>Edit</th>
+              <th>Delete</th>
             </tr>
           </thead>
 
@@ -127,8 +127,6 @@ const cancelEdit = () => {
                   <td>{entry.date}</td>
                   <td>{entry.month}</td>
                   <td>{entry.grinNo}</td>
-                  <td>{entry.rollNo}</td>
-                  <td>{entry.sheetNo}</td>
                   <td>{entry.party}</td>
                   <td>{entry.invoice}</td>
                   <td>{entry.category}</td>
@@ -162,14 +160,8 @@ const cancelEdit = () => {
                       entry.pcsCut
                     )}
                   </td>
-                  <td>
-                    <button
-                      className="action-button danger"
-                      onClick={() => deleteEntry(entry.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+                  <td>{entry.rollNo}</td>
+                  <td>{entry.sheetNo}</td>
                   <td>
                     {editingRow === entry.id ? (
                       <>
@@ -188,6 +180,14 @@ const cancelEdit = () => {
                         Edit
                       </button>
                     )}
+                  </td>
+                  <td>
+                    <button
+                      className="action-button danger"
+                      onClick={() => deleteEntry(entry.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

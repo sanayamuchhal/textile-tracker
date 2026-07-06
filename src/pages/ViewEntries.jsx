@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
 import "./Reports.css";
 
 function ViewEntries() {
   const [entries, setEntries] = useState([]);
-  const [searchRoll, setSearchRoll] = useState("");
+  const [selectedWeek, setSelectedWeek] = useState("");
+  const [selectedWorker, setSelectedWorker] = useState("");
+  const [selectedRollNumber, setSelectedRollNumber] = useState("");
 
   useEffect(() => {
     loadEntries();
@@ -27,6 +29,68 @@ function ViewEntries() {
     loadEntries();
   };
 
+  const filteredEntries = useMemo(() => {
+    return entries.filter((entry) => {
+      const matchesWeek = !selectedWeek || String(entry.week) === selectedWeek;
+      const matchesWorker =
+        !selectedWorker || String(entry.workerName) === selectedWorker;
+      const matchesRollNumber =
+        !selectedRollNumber || String(entry.rollNo) === selectedRollNumber;
+
+      return matchesWeek && matchesWorker && matchesRollNumber;
+    });
+  }, [entries, selectedWeek, selectedWorker, selectedRollNumber]);
+
+  const weekOptions = useMemo(() => {
+    return [...new Set(entries.map((entry) => entry.week).filter(Boolean))].sort(
+      (a, b) => String(a).localeCompare(String(b), undefined, { numeric: true })
+    );
+  }, [entries]);
+
+  const workerOptions = useMemo(() => {
+    const filtered = entries.filter((entry) => {
+      const matchesWeek = !selectedWeek || String(entry.week) === selectedWeek;
+      const matchesRollNumber =
+        !selectedRollNumber || String(entry.rollNo) === selectedRollNumber;
+      return matchesWeek && matchesRollNumber;
+    });
+
+    return [...new Set(filtered.map((entry) => entry.workerName).filter(Boolean))].sort(
+      (a, b) => String(a).localeCompare(String(b), undefined, { numeric: true })
+    );
+  }, [entries, selectedWeek, selectedRollNumber]);
+
+  const rollNumberOptions = useMemo(() => {
+    const filtered = entries.filter((entry) => {
+      const matchesWeek = !selectedWeek || String(entry.week) === selectedWeek;
+      const matchesWorker =
+        !selectedWorker || String(entry.workerName) === selectedWorker;
+      return matchesWeek && matchesWorker;
+    });
+
+    return [...new Set(filtered.map((entry) => entry.rollNo).filter(Boolean))].sort(
+      (a, b) => Number(a) - Number(b)
+    );
+  }, [entries, selectedWeek, selectedWorker]);
+
+  useEffect(() => {
+    if (selectedWeek && !weekOptions.includes(selectedWeek)) {
+      setSelectedWeek("");
+    }
+  }, [selectedWeek, weekOptions]);
+
+  useEffect(() => {
+    if (selectedWorker && !workerOptions.includes(selectedWorker)) {
+      setSelectedWorker("");
+    }
+  }, [selectedWorker, workerOptions]);
+
+  useEffect(() => {
+    if (selectedRollNumber && !rollNumberOptions.includes(selectedRollNumber)) {
+      setSelectedRollNumber("");
+    }
+  }, [selectedRollNumber, rollNumberOptions]);
+
   return (
     <div className="data-page">
       <div className="data-page-header">
@@ -37,26 +101,55 @@ function ViewEntries() {
       </div>
 
       <div className="data-toolbar">
-        <input
-          className="data-search"
-          type="text"
-          placeholder="Search Roll Number"
-          value={searchRoll}
-          onChange={(e) => setSearchRoll(e.target.value)}
-        />
+        <label className="report-filter-field">
+          <span>Week</span>
+          <select value={selectedWeek} onChange={(e) => setSelectedWeek(e.target.value)}>
+            <option value="">All</option>
+            {weekOptions.map((week) => (
+              <option key={week} value={week}>
+                {week}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="report-filter-field">
+          <span>Worker</span>
+          <select value={selectedWorker} onChange={(e) => setSelectedWorker(e.target.value)}>
+            <option value="">All</option>
+            {workerOptions.map((worker) => (
+              <option key={worker} value={worker}>
+                {worker}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="report-filter-field">
+          <span>Roll Number</span>
+          <select value={selectedRollNumber} onChange={(e) => setSelectedRollNumber(e.target.value)}>
+            <option value="">All</option>
+            {rollNumberOptions.map((rollNumber) => (
+              <option key={rollNumber} value={rollNumber}>
+                {rollNumber}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
       <div className="data-table-shell">
         <table className="data-table">
           <thead>
             <tr>
+              <th>Challan No</th>
               <th>Date</th>
               <th>Month</th>
               <th>Week</th>
-              <th>Worker</th>
               <th>Roll No</th>
-              <th>Challan No</th>
+              <th>Article No</th>
               <th>Sheet No</th>
+              <th>Worker</th>
               <th>Job Type</th>
               <th>PCS</th>
               <th>Rate</th>
@@ -66,22 +159,16 @@ function ViewEntries() {
           </thead>
 
           <tbody>
-            {entries
-              .filter((entry) =>
-                entry.rollNo
-                  ?.toString()
-                  .toLowerCase()
-                  .includes(searchRoll.toLowerCase())
-              )
-              .map((entry) => (
+            {filteredEntries.map((entry) => (
                 <tr key={entry.id}>
+                  <td>{entry.challanNo}</td>
                   <td>{entry.date}</td>
                   <td>{entry.month}</td>
                   <td>{entry.week}</td>
-                  <td>{entry.workerName}</td>
                   <td>{entry.rollNo}</td>
-                  <td>{entry.challanNo}</td>
+                  <td>{entry.articleNo}</td>
                   <td>{entry.sheetNo}</td>
+                  <td>{entry.workerName}</td>
                   <td>{entry.jobType}</td>
                   <td>{entry.pcs}</td>
                   <td>{entry.rate}</td>
