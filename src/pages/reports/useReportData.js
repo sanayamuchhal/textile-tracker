@@ -1,29 +1,31 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { db } from "../../data/db";
 
 export function useReportData(tables) {
   const [data, setData] = useState({});
   const tablesKey = tables.join("|");
 
-  useEffect(() => {
-    let isMounted = true;
+  const loadData = useCallback(async () => {
     const tableList = tablesKey.split("|").filter(Boolean);
 
-    Promise.all(tableList.map((table) => db[table].toArray())).then((results) => {
-      if (!isMounted) return;
+    const results = await Promise.all(
+      tableList.map((table) => db[table].toArray())
+    );
 
-      setData(
-        tableList.reduce((nextData, table, index) => {
-          nextData[table] = results[index];
-          return nextData;
-        }, {})
-      );
-    });
-
-    return () => {
-      isMounted = false;
-    };
+    setData(
+      tableList.reduce((nextData, table, index) => {
+        nextData[table] = results[index];
+        return nextData;
+      }, {})
+    );
   }, [tablesKey]);
 
-  return data;
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  return {
+    ...data,
+    reload: loadData,
+  };
 }

@@ -8,13 +8,14 @@ import {
 } from "../../utils/reportUtils";
 
 function FabricStockReport() {
-  const { fabEntries = [] } = useReportData(["fabEntries"]);
+  const { fabEntries = [], cuttingVouchers = [] } =
+  useReportData(["fabEntries", "cuttingVouchers"]);
   const [category, setCategory] = useState("");
 
   const allRows = useMemo(
-    () => buildFabricStockRows(fabEntries),
-    [fabEntries]
-  );
+  () => buildFabricStockRows(fabEntries, cuttingVouchers),
+  [fabEntries, cuttingVouchers]
+);
   const rows = allRows.filter(
     (row) => !category || row.Category === category
   );

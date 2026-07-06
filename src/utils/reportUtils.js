@@ -26,28 +26,38 @@ export function exportRows(rows, fileName) {
   saveAs(blob, `${fileName}.xlsx`);
 }
 
-export function buildFabricStockRows(fabEntries) {
-  return fabEntries.map((entry) => ({
-    "GRIN No": entry.grinNo,
-    "Roll Number": entry.rollNo,
-    Category: entry.category,
-    Party: entry.party,
-    Quality: entry.quality,
-    Meter: Number(
-      (
-        number(entry.meter) -
-        number(entry.returnMeter) -
-        number(entry.meterCut)
-      ).toFixed(2)
-    ),
-  }));
-}
+export function buildFabricStockRows(fabEntries, cuttingVouchers) {
+  return fabEntries.map((entry) => {
+    const cutting = cuttingVouchers
+      .filter(
+        (voucher) =>
+          String(voucher.rollNo) === String(entry.rollNo)
+      )
+      .sort((a, b) => (b.id || 0) - (a.id || 0))[0];
 
+    return {
+      "GRIN No": entry.grinNo,
+      "Roll Number": entry.rollNo,
+      "Sheet No": cutting?.sheetNo ?? "",
+      Category: entry.category,
+      Party: entry.party,
+      Quality: entry.quality,
+      Meter: Number(
+        (
+          number(entry.meter) -
+          number(entry.returnMeter) -
+          number(entry.meterCut)
+        ).toFixed(2)
+      ),
+    };
+  });
+}
 export function buildCuttingRows(cuttingVouchers) {
   return cuttingVouchers.map((entry) => {
     const meter = number(entry.meterCut);
 
     return {
+      id: entry.id,
       Date: entry.date,
       Month: entry.month,
 
