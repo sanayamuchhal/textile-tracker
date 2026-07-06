@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { db } from "../../data/db";
 import { ReportPage, SelectFilter } from "./ReportComponents";
 import { useReportData } from "./useReportData";
 import { buildCuttingRows, exportRows, unique } from "../../utils/reportUtils";
 
 function CuttingReport() {
-  const { cuttingVouchers = [] } = useReportData(["cuttingVouchers"]);
+  const { cuttingVouchers = [], reload } =
+  useReportData(["cuttingVouchers"]);
   const [category, setCategory] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [pattern, setPattern] = useState("");
@@ -74,6 +76,21 @@ function CuttingReport() {
       setPattern("");
     }
   }, [pattern, patternOptions]);
+    const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this Cutting Voucher?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await db.cuttingVouchers.delete(id);
+      await reload();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete Cutting Voucher.");
+    }
+  };
 
   return (
     <ReportPage
@@ -101,9 +118,67 @@ function CuttingReport() {
             onChange={setPattern}
           />
         </>
-      }
-    />
-  );
+          }
+  >
+    {/* Custom table goes here */}
+    <div className="report-table-wrapper">
+  <table className="report-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Month</th>
+        <th>GRIN No</th>
+        <th>Sheet No</th>
+        <th>Roll Number</th>
+        <th>Article No</th>
+        <th>Pattern</th>
+        <th>Party</th>
+        <th>Category</th>
+        <th>Meter</th>
+        <th>PCS Cut</th>
+        <th>Average</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {rows.map((row) => (
+        <tr key={row.id}>
+          <td>{row.Date}</td>
+          <td>{row.Month}</td>
+          <td>{row["GRIN No"]}</td>
+          <td>{row["Sheet No"]}</td>
+          <td>{row["Roll Number"]}</td>
+          <td>{row["Article No"]}</td>
+          <td>{row.Pattern}</td>
+          <td>{row.Party}</td>
+          <td>{row.Category}</td>
+          <td>{row.Meter}</td>
+          <td>{row["PCS Cut"]}</td>
+          <td>{row.Average}</td>
+          <td>
+            <button
+              className="delete-btn"
+              onClick={() => handleDelete(row.id)}
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      ))}
+
+      {rows.length === 0 && (
+        <tr>
+          <td colSpan={13} className="report-empty">
+            No records found
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+  </ReportPage>
+);
 }
 
 export default CuttingReport;

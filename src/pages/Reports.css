@@ -306,3 +306,17 @@
   color: #64748b;
   font-size: 13px;
 }
+.delete-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
+}

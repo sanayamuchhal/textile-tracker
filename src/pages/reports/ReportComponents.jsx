@@ -15,11 +15,9 @@ export function ReportPage({ title, filters, rows, onExport, children }) {
 
       {filters && <div className="report-filter-bar">{filters}</div>}
 
-      {children}
-
       <div className="report-section">
-        <ReportTable rows={rows} />
-      </div>
+  {children ? children : <ReportTable rows={rows} />}
+</div>
     </div>
   );
 }
