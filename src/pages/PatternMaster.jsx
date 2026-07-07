@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
 import { ensurePatternMasterSeed } from "../data/seedPatternMaster";
+import ImportExcelButton from "../components/ImportExcelButton";
 import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
@@ -239,12 +240,15 @@ function PatternMaster() {
           <p className="report-kicker">Masters</p>
           <h2 className="data-page-title">Pattern Master</h2>
         </div>
-        <button
-          className="report-export-button"
-          onClick={() => exportRows(exportData, "Pattern_Master")}
-        >
-          Export to Excel
-        </button>
+        <div className="report-action-group">
+          <button
+            className="report-export-button"
+            onClick={() => exportRows(exportData, "Pattern_Master")}
+          >
+            Export to Excel
+          </button>
+          <ImportExcelButton />
+        </div>
       </div>
 
       <div className="data-page-grid">

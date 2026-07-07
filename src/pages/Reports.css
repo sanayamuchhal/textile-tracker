@@ -96,6 +96,26 @@
   transform: translateY(-1px);
 }
 
+.report-action-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.report-import-button {
+  background: #2563eb;
+}
+
+.report-import-button:hover {
+  background: #1d4ed8;
+}
+
+.report-import-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
+
 .report-filter-bar {
   display: flex;
   flex-wrap: wrap;

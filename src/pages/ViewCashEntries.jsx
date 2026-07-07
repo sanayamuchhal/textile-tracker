@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import ImportExcelButton from "../components/ImportExcelButton";
 import { getMonth, getWeek } from "../utils/dateHelpers";
 import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
@@ -133,12 +134,15 @@ function ViewCashEntries() {
           <p className="report-kicker">Records</p>
           <h2 className="data-page-title">Cash Register</h2>
         </div>
-        <button
-          className="report-export-button"
-          onClick={() => exportRows(exportData, "Cash_Register")}
-        >
-          Export to Excel
-        </button>
+        <div className="report-action-group">
+          <button
+            className="report-export-button"
+            onClick={() => exportRows(exportData, "Cash_Register")}
+          >
+            Export to Excel
+          </button>
+          <ImportExcelButton />
+        </div>
       </div>
 
       <div className="data-toolbar">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../data/db";
+import ImportExcelButton from "../components/ImportExcelButton";
 import { getMonth, getWeek } from "../utils/dateHelpers";
 import { exportWeeklyReport } from "../utils/exportWeeklyReport";
 import "./Reports.css";
@@ -385,9 +386,12 @@ const savePayment = async (worker) => {
     <div style={{ padding: 20 }}>
       <h1>Weekly Production Report</h1>
 
-      <button className="report-export-button" onClick={handleExport}>
-        Export to Excel
-      </button>
+      <div className="report-action-group">
+        <button className="report-export-button" onClick={handleExport}>
+          Export to Excel
+        </button>
+        <ImportExcelButton />
+      </div>
 
       <br />
       <br />

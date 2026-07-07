@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import ImportExcelButton from "../components/ImportExcelButton";
 import { exportRows, sheetNoForRoll } from "../utils/reportUtils";
 import "./Reports.css";
 
@@ -109,12 +110,15 @@ const exportData = useMemo(() => {
           <p className="report-kicker">Records</p>
           <h2 className="data-page-title">FAB Entries</h2>
         </div>
-        <button
-          className="report-export-button"
-          onClick={() => exportRows(exportData, "FAB_Entries")}
-        >
-          Export to Excel
-        </button>
+        <div className="report-action-group">
+          <button
+            className="report-export-button"
+            onClick={() => exportRows(exportData, "FAB_Entries")}
+          >
+            Export to Excel
+          </button>
+          <ImportExcelButton />
+        </div>
       </div>
 
       <div className="data-toolbar">

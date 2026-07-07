@@ -1,4 +1,5 @@
 import "../Reports.css";
+import ImportExcelButton from "../../components/ImportExcelButton";
 
 export function ReportPage({ title, filters, rows, onExport, children, columnLabels }) {
   return (
@@ -8,9 +9,12 @@ export function ReportPage({ title, filters, rows, onExport, children, columnLab
           <p className="report-kicker">Reports</p>
           <h1 className="report-title">{title}</h1>
         </div>
-        <button className="report-export-button" onClick={onExport}>
-          Export to Excel
-        </button>
+        <div className="report-action-group">
+          <button className="report-export-button" onClick={onExport}>
+            Export to Excel
+          </button>
+          <ImportExcelButton />
+        </div>
       </div>
 
       {filters && <div className="report-filter-bar">{filters}</div>}
