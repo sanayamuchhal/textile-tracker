@@ -1,14 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { db } from "../data/db";
 import { liveQuery } from "dexie";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import { ensurePatternMasterSeed } from "../data/seedPatternMaster";
 import "./entryForms.css";
 const today = new Date().toISOString().split("T")[0];
+
+function getNextChallanNo(entries) {
+  const nums = entries
+    .map((e) => Number(e.challanNo))
+    .filter((n) => !isNaN(n))
+    .sort((a, b) => a - b);
+
+  let next = 1;
+
+  for (const n of nums) {
+    if (n === next) next++;
+    else if (n > next) break;
+  }
+
+  return String(next);
+}
 
 function AddEntry() {
   const [labours, setLabours] = useState([]);
   const [fabEntries, setFabEntries] = useState([]);
   const [cuttingVouchers, setCuttingVouchers] = useState([]);
+  const [patternMaster, setPatternMaster] = useState([]);
 
  const [formData, setFormData] = useState({
   date: today,
@@ -27,21 +45,9 @@ function AddEntry() {
   const loadNextChallan = async () => {
     const entries = await db.entries.toArray();
 
-    const nums = entries
-      .map((e) => Number(e.challanNo))
-      .filter((n) => !isNaN(n))
-      .sort((a, b) => a - b);
-
-    let next = 1;
-
-    for (const n of nums) {
-      if (n === next) next++;
-      else if (n > next) break;
-    }
-
     setFormData((prev) => ({
       ...prev,
-      challanNo: String(next),
+      challanNo: getNextChallanNo(entries),
     }));
   };
 
@@ -56,11 +62,20 @@ function AddEntry() {
     error: console.error,
   });
 
-  loadNextChallan();
+  const entrySub = liveQuery(() => db.entries.toArray()).subscribe({
+    next: (entries) => {
+      setFormData((prev) => ({
+        ...prev,
+        challanNo: prev.challanNo || getNextChallanNo(entries),
+      }));
+    },
+    error: console.error,
+  });
 
   return () => {
     fabSub.unsubscribe();
     voucherSub.unsubscribe();
+    entrySub.unsubscribe();
   };
 }, []);
 
@@ -75,27 +90,53 @@ function AddEntry() {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const subscription = liveQuery(async () => {
+      await ensurePatternMasterSeed();
+      return db.patternMaster.toArray();
+    }).subscribe({
+      next: (data) => setPatternMaster(data),
+      error: (error) => console.error(error),
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const uniqueRolls = [
     ...new Set(fabEntries.map((entry) => String(entry.rollNo)).filter(Boolean)),
   ].sort((a, b) => Number(a) - Number(b));
-  const selectedLabour = labours.find(
-    (labour) => labour.name === formData.workerName
-  );
-  const assignedJobs = Array.isArray(selectedLabour?.jobs)
-    ? selectedLabour.jobs
-    : [];
+  const availableJobs = useMemo(() => {
+    const seen = new Set();
+
+    return patternMaster
+      .filter(
+        (row) =>
+          String(row.category || "").toLowerCase() ===
+          String(formData.pattern || "").toLowerCase()
+      )
+      .map((row) => row.job)
+      .filter(Boolean)
+      .filter((job) => {
+        const key = job.toLowerCase();
+
+        if (seen.has(key)) return false;
+
+        seen.add(key);
+        return true;
+      });
+  }, [patternMaster, formData.pattern]);
+
+  const selectedJobType = availableJobs.includes(formData.jobType)
+    ? formData.jobType
+    : "";
 
   const handleChange = (e) => {
   const { name, value } = e.target;
 
   if (name === "workerName") {
-    const labour = labours.find((item) => item.name === value);
-    const labourJobs = Array.isArray(labour?.jobs) ? labour.jobs : [];
-
     setFormData((prev) => ({
       ...prev,
       workerName: value,
-      jobType: labourJobs.includes(prev.jobType) ? prev.jobType : "",
     }));
 
     return;
@@ -114,6 +155,7 @@ console.log(matchingVoucher);
     rollNo: value,
     articleNo: matchingVoucher?.articleNo || "",
     pattern: matchingVoucher?.pattern || "",
+    jobType: "",
   }));
 
   return;
@@ -130,6 +172,7 @@ console.log(matchingVoucher);
  const saveEntry = async () => {
   await db.entries.add({
     ...formData,
+    jobType: selectedJobType,
     month: getMonth(formData.date),
     week: getWeek(formData.date),
 
@@ -230,11 +273,11 @@ console.log(matchingVoucher);
 
         <div className="entry-field">
           <label className="entry-label">Job Type</label>
-          <select className="entry-select" name="jobType" value={formData.jobType} onChange={handleChange}>
+          <select className="entry-select" name="jobType" value={selectedJobType} onChange={handleChange}>
             <option value="">
-              {formData.workerName ? "Select Job" : "Select Worker First"}
+              {formData.pattern ? "Select Job" : "Select Roll First"}
             </option>
-            {assignedJobs.map((job) => (
+            {availableJobs.map((job) => (
               <option key={job} value={job}>
                 {job}
               </option>

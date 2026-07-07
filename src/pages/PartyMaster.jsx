@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
 const initialForm = {
@@ -47,7 +48,6 @@ function PartyMaster() {
       return;
     }
 
-    const normalizedName = trimmedName.toLowerCase();
     const duplicate = await db.parties
       .where("name")
       .equalsIgnoreCase(trimmedName)
@@ -102,6 +102,15 @@ function PartyMaster() {
   };
 
   const formTitle = formData.id ? "Edit Party" : "Add Party";
+  const exportData = useMemo(() => {
+    return parties.map((party) => ({
+      "Party Name": party.name,
+      Address: party.address,
+      "Contact Person": party.contactPerson,
+      Mobile: party.mobile,
+      GST: party.gst,
+    }));
+  }, [parties]);
 
   return (
     <div className="data-page">
@@ -110,6 +119,12 @@ function PartyMaster() {
           <p className="report-kicker">Masters</p>
           <h2 className="data-page-title">Party Master</h2>
         </div>
+        <button
+          className="report-export-button"
+          onClick={() => exportRows(exportData, "Party_Master")}
+        >
+          Export to Excel
+        </button>
       </div>
 
       <div className="data-page-grid">

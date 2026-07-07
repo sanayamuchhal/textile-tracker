@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
 function ViewCuttingVouchers() {
@@ -37,6 +38,20 @@ function ViewCuttingVouchers() {
       );
     });
   }, [entries, search]);
+
+  const exportData = useMemo(() => {
+    return filteredEntries.map((entry) => ({
+      Date: entry.date,
+      Roll: entry.rollNo,
+      Article: entry.articleNo,
+      Pattern: entry.pattern,
+      Sheet: entry.sheetNo,
+      Category: entry.category,
+      Party: entry.party,
+      "Meter Cut": entry.meterCut,
+      "PCS Cut": entry.pcsCut,
+    }));
+  }, [filteredEntries]);
 
   const startEdit = (entry) => {
     setEditingId(entry.id);
@@ -105,6 +120,12 @@ function ViewCuttingVouchers() {
           <p className="report-kicker">Records</p>
           <h1 className="data-page-title">View Cutting Vouchers</h1>
         </div>
+        <button
+          className="report-export-button"
+          onClick={() => exportRows(exportData, "Cutting_Vouchers")}
+        >
+          Export to Excel
+        </button>
       </div>
 
       <div className="data-toolbar">

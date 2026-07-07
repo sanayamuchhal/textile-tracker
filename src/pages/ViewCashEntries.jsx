@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
 function ViewCashEntries() {
@@ -85,7 +86,7 @@ function ViewCashEntries() {
     loadEntries();
   };
 
-  const filteredEntries = entries.filter((entry) => {
+  const filteredEntries = useMemo(() => entries.filter((entry) => {
     const searchText = search.toLowerCase();
 
     return (
@@ -106,7 +107,24 @@ function ViewCashEntries() {
         .toLowerCase()
         .includes(searchText)
     );
-  });
+  }), [entries, search]);
+
+  const exportData = useMemo(() => {
+    return filteredEntries.map((entry) => ({
+      Date: entry.date,
+      Week: entry.week,
+      Month: entry.month,
+      Category: entry.type === "debit" ? entry.category : entry.bankName,
+      Name: entry.type === "debit" ? entry.name : "-",
+      DBT: entry.type === "debit" ? entry.amount : "-",
+      CRT: entry.type === "credit" ? entry.amount : "-",
+      Narration:
+        entry.type === "debit"
+          ? entry.narration
+          : `Cheque No: ${entry.chequeNo || ""}`,
+      Balance: entry.balance,
+    }));
+  }, [filteredEntries]);
 
   return (
     <div className="data-page">
@@ -115,6 +133,12 @@ function ViewCashEntries() {
           <p className="report-kicker">Records</p>
           <h2 className="data-page-title">Cash Register</h2>
         </div>
+        <button
+          className="report-export-button"
+          onClick={() => exportRows(exportData, "Cash_Register")}
+        >
+          Export to Excel
+        </button>
       </div>
 
       <div className="data-toolbar">

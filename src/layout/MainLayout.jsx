@@ -41,8 +41,6 @@ function MainLayout({ children }) {
       path === "/bank-withdrawal"
     ) {
       setActiveModule("cash");
-    } else if (path === "/export") {
-      setActiveModule("export");
     }
   }, [location.pathname]);
 

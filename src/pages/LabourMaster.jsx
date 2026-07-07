@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
 const initialForm = {
@@ -199,6 +200,15 @@ function LabourMaster() {
   };
 
   const formTitle = formData.id ? "Edit Labour" : "Add Labour";
+  const exportData = useMemo(() => {
+    return labours.map((labour) => ({
+      "Labour Name": labour.name,
+      Jobs: Array.isArray(labour.jobs) ? labour.jobs.join(", ") : "",
+      Address: labour.address,
+      "Aadhaar Number": labour.aadhaarNo,
+      "Mobile Number": labour.mobileNo,
+    }));
+  }, [labours]);
 
   return (
     <div className="data-page">
@@ -207,6 +217,12 @@ function LabourMaster() {
           <p className="report-kicker">Masters</p>
           <h2 className="data-page-title">Labour Master</h2>
         </div>
+        <button
+          className="report-export-button"
+          onClick={() => exportRows(exportData, "Labour_Master")}
+        >
+          Export to Excel
+        </button>
       </div>
 
       <div className="data-page-grid">

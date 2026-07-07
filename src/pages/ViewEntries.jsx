@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
 function ViewEntries() {
@@ -73,6 +74,23 @@ function ViewEntries() {
     );
   }, [entries, selectedWeek, selectedWorker]);
 
+  const exportData = useMemo(() => {
+    return filteredEntries.map((entry) => ({
+      "Challan No": entry.challanNo,
+      Date: entry.date,
+      Month: entry.month,
+      Week: entry.week,
+      "Roll No": entry.rollNo,
+      "Article No": entry.articleNo,
+      "Sheet No": entry.sheetNo,
+      Worker: entry.workerName,
+      "Job Type": entry.jobType,
+      PCS: entry.pcs,
+      Rate: entry.rate,
+      Amount: entry.amount,
+    }));
+  }, [filteredEntries]);
+
   useEffect(() => {
     if (selectedWeek && !weekOptions.includes(selectedWeek)) {
       setSelectedWeek("");
@@ -98,6 +116,12 @@ function ViewEntries() {
           <p className="report-kicker">Records</p>
           <h2 className="data-page-title">Saved Entries</h2>
         </div>
+        <button
+          className="report-export-button"
+          onClick={() => exportRows(exportData, "VAR_Challan_Entries")}
+        >
+          Export to Excel
+        </button>
       </div>
 
       <div className="data-toolbar">

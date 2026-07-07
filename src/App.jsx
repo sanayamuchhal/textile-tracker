@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 import MainLayout from "./layout/MainLayout";
 import Dashboard from "./pages/Dashboard";
@@ -29,10 +30,15 @@ import VarCostDetail from "./pages/reports/VarCostDetail";
 import MastersLock from "./pages/MastersLock";
 import PartyMaster from "./pages/PartyMaster";
 import LabourMaster from "./pages/LabourMaster";
-import Export from "./pages/Export";
+import PatternMaster from "./pages/PatternMaster";
+import { ensurePatternMasterSeed } from "./data/seedPatternMaster";
 
 function App() {
   console.log("APP LOADED");
+
+  useEffect(() => {
+    ensurePatternMasterSeed().catch(console.error);
+  }, []);
 
   const withLayout = (page) => <MainLayout>{page}</MainLayout>;
 
@@ -66,6 +72,7 @@ function App() {
         <Route path="/masters" element={withLayout(<MastersLock />)} />
         <Route path="/masters/party" element={withLayout(<PartyMaster />)} />
         <Route path="/masters/labour" element={withLayout(<LabourMaster />)} />
+        <Route path="/masters/pattern" element={withLayout(<PatternMaster />)} />
 
         {/* Reports */}
         <Route path="/reports" element={withLayout(<CashBookReport />)} />
@@ -77,9 +84,6 @@ function App() {
         <Route path="/reports/cash-book" element={withLayout(<CashBookReport />)} />
         <Route path="/reports/product-cost-summary" element={withLayout(<ProductCostSummary />)} />
         <Route path="/reports/var-cost-detail" element={withLayout(<VarCostDetail />)} />
-
-        {/* Export */}
-        <Route path="/export" element={withLayout(<Export />)} />
       </Routes>
     </BrowserRouter>
   );

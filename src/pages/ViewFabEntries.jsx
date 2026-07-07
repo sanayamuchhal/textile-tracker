@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
+import { exportRows } from "../utils/reportUtils";
 import "./Reports.css";
 
 function ViewFabEntries() {
@@ -59,6 +60,37 @@ const cancelEdit = () => {
   setEditingCell(null);
 };
 
+const filteredEntries = useMemo(() => {
+  return entries.filter(
+    (entry) =>
+      entry.rollNo
+        ?.toString()
+        .includes(searchRoll) &&
+      entry.grinNo
+        ?.toString()
+        .includes(searchGrin)
+  );
+}, [entries, searchRoll, searchGrin]);
+
+const exportData = useMemo(() => {
+  return filteredEntries.map((entry) => ({
+    Date: entry.date,
+    Month: entry.month,
+    GRIN: entry.grinNo,
+    Party: entry.party,
+    Invoice: entry.invoice,
+    Category: entry.category,
+    Quality: entry.quality,
+    Meter: entry.meter,
+    Rate: entry.rate,
+    Value: Number(Number(entry.value || 0).toFixed(2)),
+    "Return Meter": entry.returnMeter,
+    "PCS Cut": entry.pcsCut,
+    "Roll No": entry.rollNo,
+    "Sheet No": entry.sheetNo,
+  }));
+}, [filteredEntries]);
+
   return (
     <div className="data-page">
       <div className="data-page-header">
@@ -66,6 +98,12 @@ const cancelEdit = () => {
           <p className="report-kicker">Records</p>
           <h2 className="data-page-title">FAB Entries</h2>
         </div>
+        <button
+          className="report-export-button"
+          onClick={() => exportRows(exportData, "FAB_Entries")}
+        >
+          Export to Excel
+        </button>
       </div>
 
       <div className="data-toolbar">
@@ -109,17 +147,7 @@ const cancelEdit = () => {
           </thead>
 
           <tbody>
-            {entries
-              .filter(
-                (entry) =>
-                  entry.rollNo
-                    ?.toString()
-                    .includes(searchRoll) &&
-                  entry.grinNo
-                    ?.toString()
-                    .includes(searchGrin)
-              )
-              .map((entry) => (
+            {filteredEntries.map((entry) => (
                 <tr
                   key={entry.id}
                   className={editingRow === entry.id ? "data-row-editing" : ""}

@@ -35,6 +35,7 @@ const moduleSections = {
       children: [
         { label: "Party Master", path: "/masters/party" },
         { label: "Labour Master", path: "/masters/labour" },
+        { label: "Pattern Master", path: "/masters/pattern" },
       ],
     },
   ],
@@ -69,8 +70,6 @@ const moduleSections = {
       ],
     },
   ],
-
-  export: [{ label: "Export Page", path: "/export" }],
 };
 
 function Sidebar({ activeModule }) {

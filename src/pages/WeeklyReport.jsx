@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "../data/db";
 import { getMonth, getWeek } from "../utils/dateHelpers";
 import { exportWeeklyReport } from "../utils/exportWeeklyReport";
+import "./Reports.css";
 
 function WeeklyReport() {
   const [entries, setEntries] = useState([]);
@@ -384,8 +385,8 @@ const savePayment = async (worker) => {
     <div style={{ padding: 20 }}>
       <h1>Weekly Production Report</h1>
 
-      <button onClick={handleExport}>
-        Export Weekly Report
+      <button className="report-export-button" onClick={handleExport}>
+        Export to Excel
       </button>
 
       <br />

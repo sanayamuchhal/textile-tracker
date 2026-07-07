@@ -8,7 +8,6 @@ const modules = [
   { id: "fab", label: "FAB Entry" },
   { id: "cash", label: "Cashbook" },
   { id: "reports", label: "Reports" },
-  { id: "export", label: "Export" },
 ];
 
 function TopNavbar({ activeModule, onModuleSelect }) {
@@ -36,9 +35,6 @@ function TopNavbar({ activeModule, onModuleSelect }) {
         break;
       case "reports":
         targetPath = "/reports";
-        break;
-      case "export":
-        targetPath = "/export";
         break;
       default:
         targetPath = "/";
