@@ -3,11 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import Dashboard from "./pages/Dashboard";
 
-import VarChallan from "./pages/VarChallan";
 import AddEntry from "./pages/AddEntry";
 import ViewEntries from "./pages/ViewEntries";
 
-import FabGrin from "./pages/FabGrin";
 import FabEntry from "./pages/FabEntry";
 import FabricReturnInput from "./pages/FabricReturnInput";
 import CuttingVoucherInput from "./pages/CuttingVoucherInput";
@@ -15,14 +13,12 @@ import ViewFabEntries from "./pages/ViewFabEntries";
 
 import ViewCuttingVouchers from "./pages/ViewCuttingVouchers";
 
-import CashBook from "./pages/CashBook";
 import AddCashEntry from "./pages/AddCashEntry";
 import ViewCashEntries from "./pages/ViewCashEntries";
 
 import BankWithdrawal from "./pages/BankWithdrawal";
 
 import WeeklyReport from "./pages/WeeklyReport";
-import Reports from "./pages/Reports";
 import RequiredReports from "./pages/RequiredReports";
 import FabricStockReport from "./pages/reports/FabricStockReport";
 import CuttingReport from "./pages/reports/CuttingReport";
@@ -32,6 +28,7 @@ import ProductCostSummary from "./pages/reports/ProductCostSummary";
 import VarCostDetail from "./pages/reports/VarCostDetail";
 import MastersLock from "./pages/MastersLock";
 import PartyMaster from "./pages/PartyMaster";
+import LabourMaster from "./pages/LabourMaster";
 import Export from "./pages/Export";
 
 function App() {
@@ -68,6 +65,7 @@ function App() {
         {/* Masters */}
         <Route path="/masters" element={withLayout(<MastersLock />)} />
         <Route path="/masters/party" element={withLayout(<PartyMaster />)} />
+        <Route path="/masters/labour" element={withLayout(<LabourMaster />)} />
 
         {/* Reports */}
         <Route path="/reports" element={withLayout(<CashBookReport />)} />

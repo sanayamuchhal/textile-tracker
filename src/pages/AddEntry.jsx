@@ -1,20 +1,14 @@
 import { useState, useEffect } from "react";
 import { db } from "../data/db";
-import { seedWorkers } from "../data/seedWorkers";
-import { seedJobs } from "../data/seedJobs";
+import { liveQuery } from "dexie";
 import { getMonth, getWeek } from "../utils/dateHelpers";
 import "./entryForms.css";
 const today = new Date().toISOString().split("T")[0];
 
 function AddEntry() {
-  const [workers, setWorkers] = useState([]);
-  const [jobs, setJobs] = useState([]);
+  const [labours, setLabours] = useState([]);
   const [fabEntries, setFabEntries] = useState([]);
   const [cuttingVouchers, setCuttingVouchers] = useState([]);
-  const [newWorker, setNewWorker] = useState("");
-  const [newJob, setNewJob] = useState("");
-  const [showWorkerInput, setShowWorkerInput] = useState(false);
-  const [showJobInput, setShowJobInput] = useState(false);
 
  const [formData, setFormData] = useState({
   date: today,
@@ -52,105 +46,84 @@ function AddEntry() {
   };
 
   useEffect(() => {
-    (async () => {
-      await seedWorkers();
-      await seedJobs();
+  const fabSub = liveQuery(() => db.fabEntries.toArray()).subscribe({
+    next: setFabEntries,
+    error: console.error,
+  });
 
-      setWorkers(await db.workers.toArray());
-      setJobs(await db.jobs.toArray());
+  const voucherSub = liveQuery(() => db.cuttingVouchers.toArray()).subscribe({
+    next: setCuttingVouchers,
+    error: console.error,
+  });
 
-      const [fabData, voucherData] = await Promise.all([
-        db.fabEntries.toArray(),
-        db.cuttingVouchers.toArray(),
-      ]);
+  loadNextChallan();
 
-      setFabEntries(fabData);
-      setCuttingVouchers(voucherData);
+  return () => {
+    fabSub.unsubscribe();
+    voucherSub.unsubscribe();
+  };
+}, []);
 
-      await loadNextChallan();
-    })();
+  useEffect(() => {
+    const subscription = liveQuery(() =>
+      db.labours.orderBy("name").toArray()
+    ).subscribe({
+      next: (data) => setLabours(data),
+      error: (error) => console.error(error),
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
+
   const uniqueRolls = [
     ...new Set(fabEntries.map((entry) => String(entry.rollNo)).filter(Boolean)),
   ].sort((a, b) => Number(a) - Number(b));
+  const selectedLabour = labours.find(
+    (labour) => labour.name === formData.workerName
+  );
+  const assignedJobs = Array.isArray(selectedLabour?.jobs)
+    ? selectedLabour.jobs
+    : [];
 
   const handleChange = (e) => {
   const { name, value } = e.target;
 
-  if (name === "rollNo") {
-    const matchingFabEntry = fabEntries.find(
-      (entry) => String(entry.rollNo) === String(value)
-    );
-    const matchingVoucher = cuttingVouchers.find(
-      (voucher) => String(voucher.rollNo) === String(value)
-    );
+  if (name === "workerName") {
+    const labour = labours.find((item) => item.name === value);
+    const labourJobs = Array.isArray(labour?.jobs) ? labour.jobs : [];
 
     setFormData((prev) => ({
       ...prev,
-      rollNo: value,
-      articleNo: matchingFabEntry?.articleNo || "",
-      pattern: matchingVoucher?.pattern || "",
+      workerName: value,
+      jobType: labourJobs.includes(prev.jobType) ? prev.jobType : "",
     }));
 
     return;
   }
+
+ if (name === "rollNo") {
+  const matchingVoucher = cuttingVouchers
+    .filter((voucher) => String(voucher.rollNo) === String(value))
+    .sort((a, b) => Number(b.articleNo) - Number(a.articleNo))[0];
+    console.log(cuttingVouchers);
+console.log(value);
+console.log(matchingVoucher);
+
+  setFormData((prev) => ({
+    ...prev,
+    rollNo: value,
+    articleNo: matchingVoucher?.articleNo || "",
+    pattern: matchingVoucher?.pattern || "",
+  }));
+
+  return;
+}
 
   setFormData((prev) => ({
     ...prev,
     [name]: value,
   }));
 };
-const addWorker = async () => {
-  const name = newWorker.trim();
-
-  if (!name) {
-    return alert("Enter worker name");
-  }
-
-  if (
-    workers.some(
-      (w) => w.name.toLowerCase() === name.toLowerCase()
-    )
-  ) {
-    return alert("Worker already exists");
-  }
-
-  await db.workers.add({ name });
-
-  setWorkers(await db.workers.toArray());
-
-  setFormData((prev) => ({
-    ...prev,
-    workerName: name,
-  }));
-
-  setNewWorker("");
-  setShowWorkerInput(false);
-};
-  const addJob = async () => {
-    const name = newJob.trim();
-
-    if (!name) return alert("Enter job name");
-
-    if (
-      jobs.some(
-        (j) => j.name.toLowerCase() === name.toLowerCase()
-      )
-    )
-      return alert("Job already exists");
-
-    await db.jobs.add({ name });
-
-    setJobs(await db.jobs.toArray());
-
-    setFormData((p) => ({
-      ...p,
-      jobType: name,
-    }));
-
-    setNewJob("");
-    setShowJobInput(false);
-  };
 
   const amount = (+formData.pcs || 0) * (+formData.rate || 0);
 
@@ -206,30 +179,13 @@ const addWorker = async () => {
           <label className="entry-label">Worker</label>
           <select className="entry-select" name="workerName" value={formData.workerName} onChange={handleChange}>
             <option value="">Select Worker</option>
-            {workers.map((w) => (
-              <option key={w.id} value={w.name}>
-                {w.name}
+            {labours.map((labour) => (
+              <option key={labour.id} value={labour.name}>
+                {labour.name}
               </option>
             ))}
           </select>
         </div>
-
-        <div className="entry-field">
-          <button className="entry-button" onClick={() => setShowWorkerInput(!showWorkerInput)}>
-            + Add Worker
-          </button>
-        </div>
-
-        {showWorkerInput && (
-          <>
-            <div className="entry-field">
-              <input className="entry-input" value={newWorker} onChange={(e) => setNewWorker(e.target.value)} placeholder="Worker Name" />
-            </div>
-            <div className="entry-field">
-              <button className="entry-button" onClick={addWorker}>Save Worker</button>
-            </div>
-          </>
-        )}
 
         <div className="entry-field">
           <label className="entry-label">Payment Mode</label>
@@ -275,31 +231,16 @@ const addWorker = async () => {
         <div className="entry-field">
           <label className="entry-label">Job Type</label>
           <select className="entry-select" name="jobType" value={formData.jobType} onChange={handleChange}>
-            <option value="">Select Job</option>
-            {jobs.map((j) => (
-              <option key={j.id} value={j.name}>
-                {j.name}
+            <option value="">
+              {formData.workerName ? "Select Job" : "Select Worker First"}
+            </option>
+            {assignedJobs.map((job) => (
+              <option key={job} value={job}>
+                {job}
               </option>
             ))}
           </select>
         </div>
-
-        <div className="entry-field">
-          <button className="entry-button" onClick={() => setShowJobInput(!showJobInput)}>
-            + Add Job
-          </button>
-        </div>
-
-        {showJobInput && (
-          <>
-            <div className="entry-field">
-              <input className="entry-input" value={newJob} onChange={(e) => setNewJob(e.target.value)} placeholder="Job Name" />
-            </div>
-            <div className="entry-field">
-              <button className="entry-button" onClick={addJob}>Save Job</button>
-            </div>
-          </>
-        )}
 
         <div className="entry-field">
           <label className="entry-label">PCS</label>

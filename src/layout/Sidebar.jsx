@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const initialExpandedSections = {
@@ -34,6 +34,7 @@ const moduleSections = {
       heading: "MASTERS",
       children: [
         { label: "Party Master", path: "/masters/party" },
+        { label: "Labour Master", path: "/masters/labour" },
       ],
     },
   ],
