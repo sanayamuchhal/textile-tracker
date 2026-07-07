@@ -1,5 +1,6 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { sheetNoForRoll } from "./reportUtils";
 
 // ---------------- VAR CHALLAN ----------------
 
@@ -45,14 +46,14 @@ export const exportToExcel = (data) => {
 
 // ---------------- FAB GRIN ----------------
 
-export const exportFabToExcel = (data) => {
+export const exportFabToExcel = (data, cuttingVouchers = []) => {
 
   const formattedData = data.map((entry) => ({
     Date: entry.date,
     Month: entry.month,
     Week: entry.week,
     "GRIN No": entry.grinNo,
-    "Sheet No": entry.sheetNo,
+    "Sheet No": sheetNoForRoll(cuttingVouchers, entry.rollNo),
     "Roll No": entry.rollNo,
     Party: entry.party,
     Invoice: entry.invoice,

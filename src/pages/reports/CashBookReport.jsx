@@ -22,17 +22,18 @@ function CashBookReport() {
     <ReportPage
       title="Cash Book Report"
       rows={rows}
+      columnLabels={{ Category: "Head", Head: "Name" }}
       onExport={() => exportRows(rows, "Cash_Book_Report")}
       filters={
         <>
           <SelectFilter
-            label="Category"
+            label="Head"
             value={category}
             options={unique(allRows.map((row) => row.Category))}
             onChange={setCategory}
           />
           <SelectFilter
-            label="Head"
+            label="Name"
             value={head}
             options={unique(allRows.map((row) => row.Head))}
             onChange={setHead}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../data/db";
 import { getMonth, getWeek } from "../utils/dateHelpers";
+import { sheetNoForRoll } from "../utils/reportUtils";
 import "./entryForms.css";
 
 const today = new Date().toISOString().split("T")[0];
@@ -56,7 +57,7 @@ function CuttingVoucherInput() {
       category: roll?.category || "",
       party: roll?.party || "",
       meter: roll?.meter || "",
-      sheetNo: roll?.sheetNo || "",
+      sheetNo: sheetNoForRoll(allVouchers, value),
       articleNo: nextArticleNo,
     }));
   };

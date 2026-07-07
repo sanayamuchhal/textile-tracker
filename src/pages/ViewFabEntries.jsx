@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
-import { exportRows } from "../utils/reportUtils";
+import { exportRows, sheetNoForRoll } from "../utils/reportUtils";
 import "./Reports.css";
 
 function ViewFabEntries() {
   const [entries, setEntries] = useState([]);
+  const [cuttingVouchers, setCuttingVouchers] = useState([]);
   const [searchRoll, setSearchRoll] = useState("");
   const [searchGrin, setSearchGrin] = useState("");
 const [editingRow, setEditingRow] = useState(null);
@@ -15,8 +16,12 @@ const [editData, setEditData] = useState({});
   }, []);
 
   const loadEntries = async () => {
-    const data = await db.fabEntries.toArray();
-    setEntries(data);
+    const [fabData, cuttingData] = await Promise.all([
+      db.fabEntries.toArray(),
+      db.cuttingVouchers.toArray(),
+    ]);
+    setEntries(fabData);
+    setCuttingVouchers(cuttingData);
   };
 
   const deleteEntry = async (id) => {
@@ -34,8 +39,11 @@ const [editData, setEditData] = useState({});
   setEditingRow(entry.id);
   setEditingCell(null);
 
+  const editableEntry = { ...entry };
+  delete editableEntry.sheetNo;
+
   setEditData({
-    ...entry,
+    ...editableEntry,
   });
 };
 
@@ -47,7 +55,10 @@ const handleEditChange = (field, value) => {
 };
 
 const saveEdit = async () => {
-  await db.fabEntries.update(editingRow, editData);
+  const updatedEntry = { ...editData };
+  delete updatedEntry.sheetNo;
+
+  await db.fabEntries.update(editingRow, updatedEntry);
 
   setEditingRow(null);
   setEditingCell(null);
@@ -87,9 +98,9 @@ const exportData = useMemo(() => {
     "Return Meter": entry.returnMeter,
     "PCS Cut": entry.pcsCut,
     "Roll No": entry.rollNo,
-    "Sheet No": entry.sheetNo,
+    "Sheet No": sheetNoForRoll(cuttingVouchers, entry.rollNo),
   }));
-}, [filteredEntries]);
+}, [cuttingVouchers, filteredEntries]);
 
   return (
     <div className="data-page">
@@ -189,7 +200,7 @@ const exportData = useMemo(() => {
                     )}
                   </td>
                   <td>{entry.rollNo}</td>
-                  <td>{entry.sheetNo}</td>
+                  <td>{sheetNoForRoll(cuttingVouchers, entry.rollNo) || "-"}</td>
                   <td>
                     {editingRow === entry.id ? (
                       <>

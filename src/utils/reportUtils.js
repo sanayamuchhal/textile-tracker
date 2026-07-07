@@ -26,19 +26,22 @@ export function exportRows(rows, fileName) {
   saveAs(blob, `${fileName}.xlsx`);
 }
 
+export function findCuttingVoucherByRoll(cuttingVouchers, rollNo) {
+  return cuttingVouchers
+    .filter((voucher) => String(voucher.rollNo) === String(rollNo))
+    .sort((a, b) => (b.id || 0) - (a.id || 0))[0];
+}
+
+export function sheetNoForRoll(cuttingVouchers, rollNo) {
+  return findCuttingVoucherByRoll(cuttingVouchers, rollNo)?.sheetNo || "";
+}
+
 export function buildFabricStockRows(fabEntries, cuttingVouchers) {
   return fabEntries.map((entry) => {
-    const cutting = cuttingVouchers
-      .filter(
-        (voucher) =>
-          String(voucher.rollNo) === String(entry.rollNo)
-      )
-      .sort((a, b) => (b.id || 0) - (a.id || 0))[0];
-
     return {
       "GRIN No": entry.grinNo,
       "Roll Number": entry.rollNo,
-      "Sheet No": cutting?.sheetNo ?? "",
+      "Sheet No": sheetNoForRoll(cuttingVouchers, entry.rollNo),
       Category: entry.category,
       Party: entry.party,
       Quality: entry.quality,

@@ -1,6 +1,6 @@
 import "../Reports.css";
 
-export function ReportPage({ title, filters, rows, onExport, children }) {
+export function ReportPage({ title, filters, rows, onExport, children, columnLabels }) {
   return (
     <div className="report-shell">
       <div className="report-toolbar">
@@ -16,7 +16,7 @@ export function ReportPage({ title, filters, rows, onExport, children }) {
       {filters && <div className="report-filter-bar">{filters}</div>}
 
       <div className="report-section">
-  {children ? children : <ReportTable rows={rows} />}
+  {children ? children : <ReportTable rows={rows} columnLabels={columnLabels} />}
 </div>
     </div>
   );
@@ -38,7 +38,7 @@ export function SelectFilter({ label, value, options, onChange }) {
   );
 }
 
-export function ReportTable({ rows }) {
+export function ReportTable({ rows, columnLabels = {} }) {
   const columns = rows.length ? Object.keys(rows[0]) : [];
 
   return (
@@ -47,7 +47,7 @@ export function ReportTable({ rows }) {
         <thead>
           <tr>
             {columns.map((column) => (
-              <th key={column}>{column}</th>
+              <th key={column}>{columnLabels[column] || column}</th>
             ))}
           </tr>
         </thead>

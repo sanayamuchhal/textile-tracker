@@ -116,7 +116,6 @@ const loadNextNumbers = async () => {
 
   party: grinDetails.party,
   invoice: grinDetails.invoice,
-  sheetNo: grinDetails.sheetNo,
   category: grinDetails.category,
 
   rollNo: roll.rollNo,
@@ -208,11 +207,6 @@ const finishGrin = async () => {
             <div className="fab-entry-field">
               <label className="entry-label">Category</label>
               <input className="entry-input" name="category" placeholder="Category" value={grinDetails.category} onChange={handleGrinChange} />
-            </div>
-
-            <div className="fab-entry-field">
-              <label className="entry-label">Sheet No.</label>
-              <input className="entry-input" name="sheetNo" placeholder="Sheet Number" value={grinDetails.sheetNo} onChange={handleGrinChange} />
             </div>
           </div>
         </div>

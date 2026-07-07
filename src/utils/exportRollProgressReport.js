@@ -1,9 +1,11 @@
 import * as XLSX from "xlsx";
 import { db } from "../data/db";
+import { sheetNoForRoll } from "./reportUtils";
 
 export async function exportRollProgressReport() {
   // Load data
   const fabEntries = await db.fabEntries.toArray();
+  const cuttingVouchers = await db.cuttingVouchers.toArray();
   const varEntries = await db.entries.toArray();
 
   // Create report
@@ -20,7 +22,7 @@ export async function exportRollProgressReport() {
     return {
       "Roll No": fab.rollNo,
       "Category": fab.category,
-      "Sheet No": fab.sheetNo,
+      "Sheet No": sheetNoForRoll(cuttingVouchers, fab.rollNo),
       "PCS Cut": fab.pcsCut,
       "PCS Worked": pcsWorked,
       "Difference": Number(fab.pcsCut || 0) - pcsWorked,
