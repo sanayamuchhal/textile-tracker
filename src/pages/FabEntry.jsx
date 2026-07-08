@@ -60,7 +60,7 @@ const loadNextNumbers = async () => {
   }
 
   // Next Roll Number
-  let nextRoll = 1;
+  let nextRoll = 10872;
 
   if (entries.length > 0) {
     nextRoll =
