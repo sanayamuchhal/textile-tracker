@@ -51,13 +51,7 @@ function FabEntry() {
 const loadNextNumbers = async () => {
   const entries = await db.fabEntries.toArray();
 
-  // Next GRIN Number
-  let nextGrin = 1;
-
-  if (entries.length > 0) {
-    nextGrin =
-      Math.max(...entries.map((e) => Number(e.grinNo))) + 1;
-  }
+  
 
   // Next Roll Number
   let nextRoll = 10872;
@@ -67,10 +61,7 @@ const loadNextNumbers = async () => {
       Math.max(...entries.map((e) => Number(e.rollNo))) + 1;
   }
 
-  setGrinDetails((prev) => ({
-    ...prev,
-    grinNo: String(nextGrin),
-  }));
+  
 
   setRoll((prev) => ({
     ...prev,
@@ -172,7 +163,14 @@ const finishGrin = async () => {
 
             <div className="fab-entry-field">
               <label className="entry-label">GRIN No.</label>
-              <input className="entry-input" name="grinNo" value={grinDetails.grinNo} readOnly />
+              <input
+  className="entry-input"
+  type="text"
+  name="grinNo"
+  value={grinDetails.grinNo}
+  onChange={handleGrinChange}
+  required
+/>
             </div>
 
             <div className="fab-entry-field">
