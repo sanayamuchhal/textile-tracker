@@ -70,7 +70,7 @@ function PatternMaster() {
   const exportData = useMemo(() => {
     return categories.flatMap((category) =>
       groupedPatterns[category].map((row) => ({
-        Category: row.category,
+        Pattern: row.category,
         Job: row.job,
       }))
     );
@@ -98,7 +98,7 @@ function PatternMaster() {
       ) || category;
 
     if (!category) {
-      setError("Category is required.");
+      setError("Pattern is required.");
       return;
     }
 
@@ -135,7 +135,7 @@ function PatternMaster() {
     const newCategory = normalizeValue(editingCategoryName);
 
     if (!newCategory) {
-      setError("Category is required.");
+      setError("Pattern is required.");
       return;
     }
 
@@ -146,7 +146,7 @@ function PatternMaster() {
     );
 
     if (duplicateCategory) {
-      setError("A category with this name already exists.");
+      setError("A Pattern with this name already exists.");
       return;
     }
 
@@ -254,12 +254,12 @@ function PatternMaster() {
       <div className="data-page-grid">
         <div className="master-form-card">
           <div className="card-header">
-            <h3>Add Category Job</h3>
+            <h3>Add Pattern Job</h3>
           </div>
 
           <form onSubmit={handleSave}>
             <div className="master-field">
-              <label htmlFor="category">Category *</label>
+              <label htmlFor="category">Pattern *</label>
               <input
                 id="category"
                 name="category"
@@ -267,7 +267,7 @@ function PatternMaster() {
                 onChange={handleChange}
                 className="entry-input"
                 list="pattern-categories"
-                placeholder="Enter or select category"
+                placeholder="Enter or select pattern"
               />
               <datalist id="pattern-categories">
                 {categories.map((category) => (
@@ -321,7 +321,7 @@ function PatternMaster() {
             <table className="report-table">
               <thead>
                 <tr>
-                  <th>Category</th>
+                  <th>Pattern</th>
                   <th>Jobs</th>
                   <th>Actions</th>
                 </tr>
@@ -428,7 +428,7 @@ function PatternMaster() {
                               type="button"
                               onClick={() => startCategoryEdit(category)}
                             >
-                              Edit Category
+                              Edit Pattern
                             </button>
                             <button
                               className="action-button danger"
