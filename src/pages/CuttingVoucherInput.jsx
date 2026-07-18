@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../data/db";
 import { getMonth, getWeek } from "../utils/dateHelpers";
 import { sheetNoForRoll } from "../utils/reportUtils";
@@ -8,6 +8,7 @@ const today = new Date().toISOString().split("T")[0];
 
 function CuttingVoucherInput() {
   const [rolls, setRolls] = useState([]);
+  const [patterns, setPatterns] = useState([]);
   const [form, setForm] = useState({
     date: today,
     rollNo: "",
@@ -21,18 +22,29 @@ function CuttingVoucherInput() {
     articleNo: "",
     sheetNo: "",
   });
+  const uniquePatterns = useMemo(() => {
+  return [...new Set(patterns.map((item) => item.category))].sort();
+}, [patterns]);
 
   useEffect(() => {
-    let isMounted = true;
+let isMounted = true;
 
-    db.fabEntries.toArray().then((data) => {
-      if (isMounted) setRolls(data);
-    });
+const loadData = async () => {
+const fabData = await db.fabEntries.toArray();
+const patternData = await db.patternMaster.toArray();
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+if (!isMounted) return;
+
+setRolls(fabData);
+setPatterns(patternData);
+};
+
+loadData();
+
+return () => {
+isMounted = false;
+};
+}, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,9 +178,27 @@ function CuttingVoucherInput() {
         </div>
 
         <div className="entry-field">
-          <label className="entry-label">Pattern</label>
-          <input className="entry-input" name="pattern" value={form.pattern} onChange={handleChange} />
-        </div>
+<label className="entry-label">Pattern</label>
+
+<input
+className="entry-input"
+list="patterns"
+name="pattern"
+value={form.pattern}
+onChange={handleChange}
+placeholder="Enter or select pattern"
+/>
+
+<datalist id="patterns">
+{uniquePatterns.map((pattern) => (
+<option
+key={pattern}
+value={pattern}
+/>
+))}
+</datalist>
+
+</div>
 
         <div className="entry-field">
           <label className="entry-label">Article No</label>
