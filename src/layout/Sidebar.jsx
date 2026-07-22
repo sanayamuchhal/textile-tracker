@@ -6,6 +6,7 @@ const initialExpandedSections = {
   Fabric: true,
   Cashbook: true,
   "Cost Analysis": true,
+  Utilities: true,
 };
 
 const moduleSections = {
@@ -67,6 +68,12 @@ const moduleSections = {
       heading: "Cost Analysis",
       children: [
         { label: "Variable Cost Detail", path: "/reports/var-cost-detail" },
+      ],
+    },
+    {
+      heading: "Utilities",
+      children: [
+        { label: "Verify PCS Cut", path: "/reports/verify-pcs-cut" },
       ],
     },
   ],

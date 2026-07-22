@@ -9,6 +9,7 @@ const today = new Date().toISOString().split("T")[0];
 function CuttingVoucherInput() {
   const [rolls, setRolls] = useState([]);
   const [patterns, setPatterns] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
   const [form, setForm] = useState({
     date: today,
     rollNo: "",
@@ -85,10 +86,15 @@ isMounted = false;
   };
 
   const saveVoucher = async () => {
+    if (isSaving) return;
+
     if (!form.date || !form.rollNo || !form.meterCut || !form.pcsCut) {
       alert("Please fill date, roll number, meter cut and pcs cut.");
       return;
     }
+    
+    setIsSaving(true);
+    try {
 
     await db.cuttingVouchers.add({
   ...form,
@@ -125,6 +131,9 @@ isMounted = false;
       sheetNo: "",
     });
     setRolls(await db.fabEntries.toArray());
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -210,7 +219,9 @@ value={pattern}
           <input className="entry-input" name="sheetNo" value={form.sheetNo} onChange={handleChange} />
         </div>
 
-        <button className="entry-button" onClick={saveVoucher}>Save Cutting Voucher</button>
+        <button className="entry-button" onClick={saveVoucher} disabled={isSaving}>
+          {isSaving ? "Saving..." : "Save Cutting Voucher"}
+        </button>
       </div>
     </div>
   );

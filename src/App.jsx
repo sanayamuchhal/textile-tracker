@@ -27,6 +27,7 @@ import WagesReport from "./pages/reports/WagesReport";
 import CashBookReport from "./pages/reports/CashBookReport";
 import ProductCostSummary from "./pages/reports/ProductCostSummary";
 import VarCostDetail from "./pages/reports/VarCostDetail";
+import VerifyPcsCut from "./pages/reports/VerifyPcsCut";
 import MastersLock from "./pages/MastersLock";
 import PartyMaster from "./pages/PartyMaster";
 import LabourMaster from "./pages/LabourMaster";
@@ -84,6 +85,7 @@ function App() {
         <Route path="/reports/cash-book" element={withLayout(<CashBookReport />)} />
         <Route path="/reports/product-cost-summary" element={withLayout(<ProductCostSummary />)} />
         <Route path="/reports/var-cost-detail" element={withLayout(<VarCostDetail />)} />
+        <Route path="/reports/verify-pcs-cut" element={withLayout(<VerifyPcsCut />)} />
       </Routes>
     </BrowserRouter>
   );

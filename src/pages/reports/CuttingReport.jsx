@@ -76,7 +76,7 @@ function CuttingReport() {
       setPattern("");
     }
   }, [pattern, patternOptions]);
-    const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this Cutting Voucher?"
     );
@@ -84,7 +84,21 @@ function CuttingReport() {
     if (!confirmDelete) return;
 
     try {
-      await db.cuttingVouchers.delete(id);
+      await db.transaction("rw", db.cuttingVouchers, db.fabEntries, async () => {
+        const voucher = await db.cuttingVouchers.get(id);
+        if (voucher && voucher.rollNo) {
+          const fabEntry = await db.fabEntries.where("rollNo").equals(voucher.rollNo).first();
+          if (fabEntry) {
+            const newPcsCut = Math.max(0, (Number(fabEntry.pcsCut) || 0) - (Number(voucher.pcsCut) || 0));
+            const newMeterCut = Math.max(0, (Number(fabEntry.meterCut) || 0) - (Number(voucher.meterCut) || 0));
+            await db.fabEntries.update(fabEntry.id, {
+              pcsCut: newPcsCut,
+              meterCut: newMeterCut,
+            });
+          }
+        }
+        await db.cuttingVouchers.delete(id);
+      });
       await reload();
     } catch (err) {
       console.error(err);
